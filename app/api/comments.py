@@ -1,9 +1,9 @@
 from flask import jsonify, request, g, url_for, current_app
 from .. import db
-from ..models import Post, Permission, Comment
+from ..models import Permission, Assignment
 from . import api
 from .decorators import permission_required
-
+"""
 
 @api.route('/comments/')
 def get_comments():
@@ -65,3 +65,4 @@ def new_post_comment(id):
     db.session.commit()
     return jsonify(comment.to_json()), 201, \
         {'Location': url_for('api.get_comment', id=comment.id)}
+"""

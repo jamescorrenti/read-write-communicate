@@ -6,7 +6,7 @@ from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm,\
     CommentForm
 from .. import db
-from ..models import Permission, Role, User, Post, Comment
+from ..models import Permission, Role, User, Assignment
 from ..decorators import admin_required, permission_required
 
 
@@ -36,9 +36,9 @@ def server_shutdown():
 def index():
     form = PostForm()
     if current_user.can(Permission.WRITE) and form.validate_on_submit():
-        post = Post(body=form.body.data,
-                    author=current_user._get_current_object())
-        db.session.add(post)
+        #post = Post(body=form.body.data,
+        #            author=current_user._get_current_object())
+        #db.session.add(post)
         db.session.commit()
         return redirect(url_for('.index'))
     page = request.args.get('page', 1, type=int)
@@ -48,8 +48,9 @@ def index():
     if show_followed:
         query = current_user.followed_posts
     else:
-        query = Post.query
-    pagination = query.order_by(Post.timestamp.desc()).paginate(
+        pass
+        #query = Post.query
+    pagination = query.order_by(Assignment.timestamp.desc()).paginate(
         page, per_page=current_app.config['RWC_POSTS_PER_PAGE'],
         error_out=False)
     posts = pagination.items
@@ -61,7 +62,7 @@ def index():
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
     page = request.args.get('page', 1, type=int)
-    pagination = user.posts.order_by(Post.timestamp.desc()).paginate(
+    pagination = user.posts.order_by(Assignment.timestamp.desc()).paginate(
         page, per_page=current_app.config['RWC_POSTS_PER_PAGE'],
         error_out=False)
     posts = pagination.items
@@ -114,35 +115,40 @@ def edit_profile_admin(id):
     form.about_me.data = user.about_me
     return render_template('edit_profile.html', form=form, user=user)
 
+# TODO: Update this
 
-@main.route('/post/<int:id>', methods=['GET', 'POST'])
-def post(id):
-    post = Post.query.get_or_404(id)
+
+@main.route('/assignment/<int:id>', methods=['GET', 'POST'])
+def assignment(id):
+    _assignment = Assignment.query.get_or_404(id)
+
     form = CommentForm()
+    """
     if form.validate_on_submit():
         comment = Comment(body=form.body.data,
-                          post=post,
+                          assignment=assignment,
                           author=current_user._get_current_object())
         db.session.add(comment)
         db.session.commit()
         flash('Your comment has been published.')
-        return redirect(url_for('.post', id=post.id, page=-1))
+        return redirect(url_for('.assignment', id=assignment.id, page=-1))
+    """
     page = request.args.get('page', 1, type=int)
     if page == -1:
-        page = (post.comments.count() - 1) // \
+        page = (_assignment.comments.count() - 1) // \
             current_app.config['RWC_COMMENTS_PER_PAGE'] + 1
-    pagination = post.comments.order_by(Comment.timestamp.asc()).paginate(
+    pagination = assignment.comments.order_by(assignment.timestamp.asc()).paginate(
         page, per_page=current_app.config['RWC_COMMENTS_PER_PAGE'],
         error_out=False)
     comments = pagination.items
-    return render_template('post.html', posts=[post], form=form,
+    return render_template('assignment.html', assignment=[_assignment], form=form,
                            comments=comments, pagination=pagination)
 
 
 @main.route('/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit(id):
-    post = Post.query.get_or_404(id)
+    post = Assignment.query.get_or_404(id)
     if current_user != post.author and \
             not current_user.can(Permission.ADMIN):
         abort(403)
@@ -157,6 +163,7 @@ def edit(id):
     return render_template('edit_post.html', form=form)
 
 
+"""
 @main.route('/follow/<username>')
 @login_required
 @permission_required(Permission.FOLLOW)
@@ -224,6 +231,7 @@ def followed_by(username):
                            endpoint='.followed_by', pagination=pagination,
                            follows=follows)
 
+"""
 
 @main.route('/all')
 @login_required
@@ -240,6 +248,7 @@ def show_followed():
     resp.set_cookie('show_followed', '1', max_age=30*24*60*60)
     return resp
 
+"""
 
 @main.route('/moderate')
 @login_required
@@ -276,3 +285,4 @@ def moderate_disable(id):
     db.session.commit()
     return redirect(url_for('.moderate',
                             page=request.args.get('page', 1, type=int)))
+"""

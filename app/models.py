@@ -24,7 +24,7 @@ class Role(db.Model):
     name = db.Column(db.String(64), unique=True)
     default = db.Column(db.Boolean, default=False, index=True)
     permissions = db.Column(db.Integer)
-    users = db.relationship('User', backref='role', lazy='dynamic')
+    #users = db.relationship('User', backref='role', lazy='dynamic')
 
     def __init__(self, **kwargs):
         super(Role, self).__init__(**kwargs)
@@ -71,13 +71,26 @@ class Role(db.Model):
         return '<Role %r>' % self.name
 
 
-class Follow(db.Model):
-    __tablename__ = 'follows'
-    follower_id = db.Column(db.Integer, db.ForeignKey('users.id'),
-                            primary_key=True)
-    followed_id = db.Column(db.Integer, db.ForeignKey('users.id'),
-                            primary_key=True)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+class SchoolUser(db.Model):
+    __tablename__='school_user'
+    id = db.Column(db.Integer, primary_key=True)
+    school_id = db.Column(db.Integer, db.ForeignKey('school.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship("User", back_populates="schools")
+    school = db.relationship("School", back_populates="users")
+    start_date = db.Column(db.DateTime(), default=datetime.utcnow)
+    end_date = db.Column(db.DateTime(), default=datetime.utcnow)
+
+
+class School(db.Model):
+    __tablename__ = "school"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), index=True)
+    city = db.Column(db.String(64))
+    state = db.Column(db.String(2))
+    address = db.Column(db.String(64))
+    country = db.Column(db.String(64))
+    users = db.relationship("SchoolUser", back_populates="school")
 
 
 class User(UserMixin, db.Model):
@@ -85,16 +98,26 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64), unique=True, index=True)
     username = db.Column(db.String(64), unique=True, index=True)
-    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+    # role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     password_hash = db.Column(db.String(128))
     confirmed = db.Column(db.Boolean, default=False)
     name = db.Column(db.String(64))
-    location = db.Column(db.String(64))
-    about_me = db.Column(db.Text())
-    member_since = db.Column(db.DateTime(), default=datetime.utcnow)
-    last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
+
+    # location = db.Column(db.String(64))
+    # about_me = db.Column(db.Text())
+    # member_since = db.Column(db.DateTime(), default=datetime.utcnow)
+    # last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
     avatar_hash = db.Column(db.String(32))
-    posts = db.relationship('Post', backref='author', lazy='dynamic')
+    # posts = db.relationship('Post', backref='author', lazy='dynamic')
+    schools = db.relationship("SchoolUser", back_populates="user")
+
+    type = db.Column(db.String(50))
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'user',
+        'polymorphic_on': type
+    }
+    """
     followed = db.relationship('Follow',
                                foreign_keys=[Follow.follower_id],
                                backref=db.backref('follower', lazy='joined'),
@@ -106,7 +129,7 @@ class User(UserMixin, db.Model):
                                 lazy='dynamic',
                                 cascade='all, delete-orphan')
     comments = db.relationship('Comment', backref='author', lazy='dynamic')
-
+    
     @staticmethod
     def add_self_follows():
         for user in User.query.all():
@@ -114,17 +137,21 @@ class User(UserMixin, db.Model):
                 user.follow(user)
                 db.session.add(user)
                 db.session.commit()
-
+    
+    """
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
+        """
         if self.role is None:
             if self.email == current_app.config['RWC_ADMIN']:
                 self.role = Role.query.filter_by(name='Administrator').first()
             if self.role is None:
                 self.role = Role.query.filter_by(default=True).first()
+        """
         if self.email is not None and self.avatar_hash is None:
             self.avatar_hash = self.gravatar_hash()
-        self.follow(self)
+
+        #self.follow(self)
 
     @property
     def password(self):
@@ -194,9 +221,10 @@ class User(UserMixin, db.Model):
         db.session.add(self)
         return True
 
+    """
     def can(self, perm):
         return self.role is not None and self.role.has_permission(perm)
-
+    """
     def is_administrator(self):
         return self.can(Permission.ADMIN)
 
@@ -213,6 +241,7 @@ class User(UserMixin, db.Model):
         return '{url}/{hash}?s={size}&d={default}&r={rating}'.format(
             url=url, hash=hash, size=size, default=default, rating=rating)
 
+    """
     def follow(self, user):
         if not self.is_following(user):
             f = Follow(follower=self, followed=user)
@@ -239,17 +268,18 @@ class User(UserMixin, db.Model):
     def followed_posts(self):
         return Post.query.join(Follow, Follow.followed_id == Post.author_id)\
             .filter(Follow.follower_id == self.id)
+    """
 
     def to_json(self):
         json_user = {
             'url': url_for('api.get_user', id=self.id),
             'username': self.username,
-            'member_since': self.member_since,
-            'last_seen': self.last_seen,
-            'posts_url': url_for('api.get_user_posts', id=self.id),
-            'followed_posts_url': url_for('api.get_user_followed_posts',
-                                          id=self.id),
-            'post_count': self.posts.count()
+            # 'member_since': self.member_since,
+            # 'last_seen': self.last_seen,
+            # 'posts_url': url_for('api.get_user_posts', id=self.id),
+            # 'followed_posts_url': url_for('api.get_user_followed_posts',
+            #                              id=self.id),
+            # 'post_count': self.posts.count()
         }
         return json_user
 
@@ -271,12 +301,70 @@ class User(UserMixin, db.Model):
         return '<User %r>' % self.username
 
 
+class Faculty(User):
+    __tablename__ = 'faculty'
+    id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    faculty_name = db.Column(db.String(30))
+    classes = db.relationship("Class", back_populates="teacher")
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'faculty'
+    }
+
+
+class ClassStudent(db.Model):
+    __tablename__ = 'class_student'
+    id = db.Column(db.Integer, primary_key=True)
+    class_id = db.Column(db.Integer, db.ForeignKey('class.id'))
+    student_id = db.Column(db.Integer, db.ForeignKey('student.id'))
+    _class = db.relationship("Class", back_populates="students")
+    student = db.relationship("Student", back_populates="classes")
+    year = db.Column(db.Integer)
+    semester = db.Column(db.Integer)
+
+
+class StudentAssignment(db.Model):
+    __tablename__ = 'student_assignment'
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('student.id'))
+    student = db.relationship("Student", back_populates="assignments")
+    assignment = db.relationship("Assignment", back_populates="students")
+    assignment_id = db.Column(db.Integer, db.ForeignKey('assignment.id'))
+    fk_ease = db.Column(db.Integer)
+    fk_grade = db.Column(db.Integer)
+
+
+class Student(User):
+    __tablename__ = 'student'
+    id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
+    student_name = db.Column(db.String(30))
+    classes = db.relationship("ClassStudent", back_populates="student")
+    assignments = db.relationship("StudentAssignment", back_populates="student")
+    grade = db.Column(db.Integer)
+    __mapper_args__ = {
+        'polymorphic_identity': 'student'
+    }
+
+
+class Class(db.Model):
+    __tablename__ = "class"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30))
+    students = db.relationship("ClassStudent", back_populates="_class")
+    teacher_id = db.Column(db.Integer, db.ForeignKey('faculty.id'))
+    teacher = db.relationship("Faculty", back_populates="classes")
+    assignments = db.relationship("Assignment")
+    #year = db.Column(db.Integer)
+    #semester = db.Column(db.Integer)
+
+
 class AnonymousUser(AnonymousUserMixin):
     def can(self, permissions):
         return False
 
     def is_administrator(self):
         return False
+
 
 login_manager.anonymous_user = AnonymousUser
 
@@ -286,14 +374,15 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-class Post(db.Model):
-    __tablename__ = 'posts'
+class Assignment(db.Model):
+    __tablename__ = 'assignment'
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.Text)
     body_html = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    comments = db.relationship('Comment', backref='post', lazy='dynamic')
+    class_id = db.Column(db.Integer, db.ForeignKey('class.id'))
+    # comments = db.relationship('Comment', backref='post', lazy='dynamic')
+    students = db.relationship("StudentAssignment", back_populates="assignment")
 
     @staticmethod
     def on_changed_body(target, value, oldvalue, initiator):
@@ -321,12 +410,12 @@ class Post(db.Model):
         body = json_post.get('body')
         if body is None or body == '':
             raise ValidationError('post does not have a body')
-        return Post(body=body)
+        return Assignment(body=body)
 
 
-db.event.listen(Post.body, 'set', Post.on_changed_body)
+db.event.listen(Assignment.body, 'set', Assignment.on_changed_body)
 
-
+"""
 class Comment(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer, primary_key=True)
@@ -365,3 +454,4 @@ class Comment(db.Model):
 
 
 db.event.listen(Comment.body, 'set', Comment.on_changed_body)
+"""

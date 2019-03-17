@@ -1,15 +1,15 @@
 from flask import jsonify, request, g, url_for, current_app
 from .. import db
-from ..models import Post, Permission
+from ..models import Assignment, Permission
 from . import api
 from .decorators import permission_required
 from .errors import forbidden
 
 
-@api.route('/posts/')
-def get_posts():
+@api.route('/assignment/')
+def get_assignments():
     page = request.args.get('page', 1, type=int)
-    pagination = Post.query.paginate(
+    pagination = Assignment.query.paginate(
         page, per_page=current_app.config['RWC_POSTS_PER_PAGE'],
         error_out=False)
     posts = pagination.items
@@ -27,16 +27,16 @@ def get_posts():
     })
 
 
-@api.route('/posts/<int:id>')
-def get_post(id):
-    post = Post.query.get_or_404(id)
+@api.route('/assignment/<int:id>')
+def get_assignment(id):
+    post = Assignment.query.get_or_404(id)
     return jsonify(post.to_json())
 
 
-@api.route('/posts/', methods=['POST'])
+@api.route('/assignment/', methods=['POST'])
 @permission_required(Permission.WRITE)
-def new_post():
-    post = Post.from_json(request.json)
+def new_assignment():
+    post = Assignment.from_json(request.json)
     post.author = g.current_user
     db.session.add(post)
     db.session.commit()
@@ -44,10 +44,10 @@ def new_post():
         {'Location': url_for('api.get_post', id=post.id)}
 
 
-@api.route('/posts/<int:id>', methods=['PUT'])
+@api.route('/assignment/<int:id>', methods=['PUT'])
 @permission_required(Permission.WRITE)
-def edit_post(id):
-    post = Post.query.get_or_404(id)
+def edit_assignment(id):
+    post = Assignment.query.get_or_404(id)
     if g.current_user != post.author and \
             not g.current_user.can(Permission.ADMIN):
         return forbidden('Insufficient permissions')

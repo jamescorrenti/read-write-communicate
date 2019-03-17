@@ -1,5 +1,13 @@
 import os
+import sys
+
+import click
 from dotenv import load_dotenv
+from flask_migrate import Migrate, upgrade
+
+from app import create_app, db
+from app.models import User, Role, Permission, Student, Faculty, Assignment, Class, School, SchoolUser, \
+    StudentAssignment, ClassStudent
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 if os.path.exists(dotenv_path):
@@ -8,23 +16,19 @@ if os.path.exists(dotenv_path):
 COV = None
 if os.environ.get('FLASK_COVERAGE'):
     import coverage
+
     COV = coverage.coverage(branch=True, include='app/*')
     COV.start()
 
-import sys
-import click
-from flask_migrate import Migrate, upgrade
-from app import create_app, db
-from app.models import User, Follow, Role, Permission, Post, Comment
-
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
-migrate = Migrate(app, db)
+dbmigrate = Migrate(app, db)
 
 
 @app.shell_context_processor
 def make_shell_context():
-    return dict(db=db, User=User, Follow=Follow, Role=Role,
-                Permission=Permission, Post=Post, Comment=Comment)
+    return dict(db=db, User=User, Role=Role, Student=Student, Faculty=Faculty, Assignment=Assignment, Class=Class,
+                School=School, Permission=Permission, SchoolUser=SchoolUser, StudentAssignment=StudentAssignment,
+                ClassStudent=ClassStudent)
 
 
 @app.cli.command()
@@ -50,6 +54,30 @@ def test(coverage):
         COV.html_report(directory=covdir)
         print('HTML version: file://%s/index.html' % covdir)
         COV.erase()
+
+
+@app.cli.command()
+def fake():
+    from app import fake
+    """Builds the DB and create fake data"""
+    print("Creating Database")
+    db.create_all()
+    print("Generating Fake Schools")
+    fake.school()
+    print("Generating Fake Students")
+    fake.students()
+    print("Generating Fake Faculty")
+    fake.faculty()
+    print("Generating Fake School/User associations")
+    fake.school_users()
+    print("Generating Fake Classes")
+    fake.classes()
+    print("Generating Fake Class/Student associations")
+    fake.class_student()
+    print("Generating Fake Assignments")
+    fake.assignments()
+    print("Generating Fake Studnet/Assignment associations")
+    fake.student_assignments()
 
 
 @app.cli.command()
