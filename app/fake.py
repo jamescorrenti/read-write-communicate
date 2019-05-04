@@ -2,7 +2,8 @@ from random import randint, uniform
 from sqlalchemy.exc import IntegrityError
 from faker import Faker
 from . import db
-from .models import User, Assignment, StudentAssignment, Student, Faculty, ClassStudent, Class, SchoolUser, School
+from .models import User, Assignment, StudentAssignment, Student, Faculty, ClassStudent, Class, SchoolUser, School, \
+    Question
 from faker.providers import BaseProvider
 
 
@@ -43,6 +44,13 @@ def students(count=100):
         school(2)
         school_count = 2
     """
+    s = Student(email="test.student@example.com",
+                username="student",
+                password='password',
+                confirmed=True,
+                name="Student #1")
+    db.session.add(s)
+    db.session.commit()
     while i < count:
         # _school = School.query.offset(randint(0, school_count-1)).first()
         s = Student(email=fake.email(),
@@ -137,19 +145,33 @@ def student_assignments(count=1000):
     db.session.commit()
 
 
-def school_users(count=200):
+def school_users(count=2):
     fake = Faker()
     user_count = User.query.count() - 1
     school_count = School.query.count() - 1
     for i in range(count):
-        u = User.query.offset(randint(0, user_count)).first()
-        s = School.query.offset(randint(0, school_count)).first()
-        s_u = SchoolUser(school_id=s.id,
-                         start_date=fake.past_date(),
-                         end_date=fake.past_date(),
-                         user_id=u.id)
-        db.session.add(s_u)
+        for j in range(user_count):
+            u = User.query.offset(j).first()
+            s = School.query.offset(randint(0, school_count)).first()
+            s_u = SchoolUser(school_id=s.id,
+                             start_date=fake.past_date(),
+                             end_date=fake.past_date(),
+                             user_id=u.id)
+            db.session.add(s_u)
     db.session.commit()
+
+
+def questions(count=1000):
+    fake = Faker()
+    a_count = Assignment.query.count() -1
+    for i in range(count):
+        a = Assignment.query.offset(randint(0, a_count)).first()
+        q = Question(q=fake.sentence(), assignment_id=a.id)
+        db.session.add(q)
+        try:
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
 
 
 if __name__ == "__main__":

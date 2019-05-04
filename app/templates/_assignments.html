@@ -1,0 +1,42 @@
+<ul class="assignments">
+    {% for assignment in assignments %}
+        {%  if current_user.type == 'student' %}
+            {% set assignment = assignment.assignment %}
+        {% endif %}
+    <li class="assignment">
+        <div class="assign-thumbnail">
+            <a href="{{ url_for('.user', username=assignment._class.teacher.username) }}">
+                <img class="img-rounded profile-thumbnail" src="{{ assignment._class.teacher.gravatar(size=40) }}">
+            </a>
+        </div>
+        <div class="assignment-content">
+            <div class="assignment-date">{{ moment(assignment.timestamp).fromNow() }}</div>
+            <div class="assignment-author"><a href="{{ url_for('._class', name=assignment._class.name) }}">{{ assignment._class.name}}</a></div>
+            <div class="assignment-body">
+                {% if assignment.body_html %}
+                    {{ assignment.body_html | safe }}
+                {% else %}
+                    {{ assignment.body }}
+                {% endif %}
+            </div>
+            <div class="assignment-footer">
+                {% if current_user == assignment.student_id %}
+                <a href="{{ url_for('.edit', id=assignment.id) }}">
+                    <span class="label label-primary">Edit</span>
+                </a>
+                {% elif current_user.is_administrator() %}
+                <a href="{{ url_for('.edit', id=assignment.id) }}">
+                    <span class="label label-danger">Edit [Admin]</span>
+                </a>
+                {% endif %}
+                <a href="{{ url_for('.assignment', id=assignment.id) }}">
+                    <span class="label label-default">Permalink</span>
+                </a>
+                <a href="{{ url_for('.assignment', id=assignment.id) }}#questions">
+                    <span class="label label-primary">{{ assignment.questions.__len__() }} Questions</span>
+                </a>
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>

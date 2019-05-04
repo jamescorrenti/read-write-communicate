@@ -7,7 +7,7 @@ from flask_migrate import Migrate, upgrade
 
 from app import create_app, db
 from app.models import User, Role, Permission, Student, Faculty, Assignment, Class, School, SchoolUser, \
-    StudentAssignment, ClassStudent
+    StudentAssignment, ClassStudent, Question
 
 dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
 if os.path.exists(dotenv_path):
@@ -28,7 +28,7 @@ dbmigrate = Migrate(app, db)
 def make_shell_context():
     return dict(db=db, User=User, Role=Role, Student=Student, Faculty=Faculty, Assignment=Assignment, Class=Class,
                 School=School, Permission=Permission, SchoolUser=SchoolUser, StudentAssignment=StudentAssignment,
-                ClassStudent=ClassStudent)
+                ClassStudent=ClassStudent, Question=Question)
 
 
 @app.cli.command()
@@ -58,8 +58,8 @@ def test(coverage):
 
 @app.cli.command()
 def fake():
-    from app import fake
     """Builds the DB and create fake data"""
+    from app import fake
     print("Creating Database")
     db.create_all()
     print("Generating Fake Schools")
@@ -78,6 +78,8 @@ def fake():
     fake.assignments()
     print("Generating Fake Studnet/Assignment associations")
     fake.student_assignments()
+    print("Generating Fake Questions")
+    fake.questions()
 
 
 @app.cli.command()

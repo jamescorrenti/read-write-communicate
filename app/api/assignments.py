@@ -12,15 +12,15 @@ def get_assignments():
     pagination = Assignment.query.paginate(
         page, per_page=current_app.config['RWC_POSTS_PER_PAGE'],
         error_out=False)
-    posts = pagination.items
+    assingnments = pagination.items
     prev = None
     if pagination.has_prev:
-        prev = url_for('api.get_posts', page=page-1)
+        prev = url_for('api.get_assignments', page=page-1)
     next = None
     if pagination.has_next:
-        next = url_for('api.get_posts', page=page+1)
+        next = url_for('api.get_assignments', page=page+1)
     return jsonify({
-        'posts': [post.to_json() for post in posts],
+        'assignments': [assignments.to_json() for assignment in assignmentss],
         'prev': prev,
         'next': next,
         'count': pagination.total
@@ -34,24 +34,25 @@ def get_assignment(id):
 
 
 @api.route('/assignment/', methods=['POST'])
-@permission_required(Permission.WRITE)
+@permission_required(Permission.CREATE_ASSIGNMENT)
 def new_assignment():
-    post = Assignment.from_json(request.json)
-    post.author = g.current_user
-    db.session.add(post)
+    assignment = Assignment.from_json(request.json)
+    # TODO: add assignment to class
+    # assignement.author = g.current_user
+    db.session.add(assignment)
     db.session.commit()
-    return jsonify(post.to_json()), 201, \
-        {'Location': url_for('api.get_post', id=post.id)}
+    return jsonify(assignment.to_json()), 201, \
+        {'Location': url_for('api.get_assignment', id=assignment.id)}
 
 
 @api.route('/assignment/<int:id>', methods=['PUT'])
 @permission_required(Permission.WRITE)
 def edit_assignment(id):
-    post = Assignment.query.get_or_404(id)
+    assignment = Assignment.query.get_or_404(id)
     if g.current_user != post.author and \
             not g.current_user.can(Permission.ADMIN):
         return forbidden('Insufficient permissions')
-    post.body = request.json.get('body', post.body)
-    db.session.add(post)
+    assignment.body = request.json.get('body', assignment.body)
+    db.session.add(assignment)
     db.session.commit()
-    return jsonify(post.to_json())
+    return jsonify(assignment.to_json())
