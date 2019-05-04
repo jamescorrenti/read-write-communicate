@@ -1,30 +1,29 @@
 # read-write-communicate
-Prototype platform for doing analysis using Flesch-Kincaid readability tests
+Prototype web-framework for doing student performance analysis using Flesch-Kincaid readability tests
 
 # Dependencies
+Python2.7 is required to run the flask app
 The required python dependencies are stored in requirements file
 ```
-$ pip3 installl -r requirements.txt
+$ pip2 installl -r requirements.txt
 ```
+# Running in development mode
+Before flask can run any commands, you need to set the `FLASK_APP` environment variable to `rwc.py`.
 
-# Running
+## Create DB
+In order for the RWC web application to work the SQLite DB needs to be created:
+
+```bash
+$ flask db init
+$ flask db upgrade
+$ flask db migrate
 ```
-$ python3 demo.py
+## Generate Fake Users
+A flask funtion has been created to generate fake students, faculty, classes, assignments, etc. To run execute:
+```bash
+$ flask fake
 ```
-
-# Results
-```
-$ python3 demo.py
-
-Input text: Playing games has always been thought to be important to the development
-of well-balanced and creative children; however, what part, if any, they should play 
-in the lives of adults has never been researched that deeply. I believe that playing 
-games is every bit as important for adults as for children. Not only is taking time
- out to play games with our children and other adults valuable to building interpersonal 
-relationships but is also a wonderful way to release built up tension.
-
-Flesch Reaging ease:
-52.23
-Flesch Kincaid Grade:
-12.8
+## Run web app
+```bash
+$ flask run
 ```
