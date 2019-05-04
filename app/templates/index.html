@@ -2,25 +2,26 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% import "_macros.html" as macros %}
 
-{% block title %}Flasky{% endblock %}
+{% block title %}RWC{% endblock %}
 
 {% block page_content %}
 <div class="page-header">
-    <h1>Hello, {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Stranger{% endif %}!</h1>
+    <h1>Student Name: {% if current_user.is_authenticated %}{{ current_user.username }}{% else %}Stranger{% endif %}!</h1>
 </div>
 <div>
-    {% if current_user.can(Permission.WRITE) %}
-    {{ wtf.quick_form(form) }}
-    {% endif %}
+    <!--
+    if current_user.can(Permission.WRITE) %}
+    wtf.quick_form(form) }}
+    endif %} -->
 </div>
-<div class="post-tabs">
+<div class="assignment-tabs">
     <ul class="nav nav-tabs">
-        <li{% if not show_followed %} class="active"{% endif %}><a href="{{ url_for('.show_all') }}">All</a></li>
+        <li{% if show_assignments %} class="active"{% endif %}><a href="{{ url_for('.show_assignments') }}">Upcoming Assignments</a></li>
         {% if current_user.is_authenticated %}
-        <li{% if show_followed %} class="active"{% endif %}><a href="{{ url_for('.show_followed') }}">Followers</a></li>
+        <li{% if not show_assignments %} class="active"{% endif %}><a href="{{ url_for('.show_all') }}">Completed Assignments</a></li>
         {% endif %}
     </ul>
-    {% include '_posts.html' %}
+    {% include '_assignments.html' %}
 </div>
 {% if pagination %}
 <div class="pagination">

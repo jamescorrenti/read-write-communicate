@@ -1,6 +1,6 @@
 from flask import jsonify, request, current_app, url_for
 from . import api
-from ..models import User, Post
+from ..models import User, Assignment, Student, Faculty
 
 
 @api.route('/users/<int:id>')
@@ -9,45 +9,28 @@ def get_user(id):
     return jsonify(user.to_json())
 
 
-@api.route('/users/<int:id>/posts/')
-def get_user_posts(id):
-    user = User.query.get_or_404(id)
+@api.route('/student/<int:id>/assignments/')
+def get_student_assignments(id):
+    student = Student.query.get_or_404(id)
     page = request.args.get('page', 1, type=int)
-    pagination = user.posts.order_by(Post.timestamp.desc()).paginate(
-        page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
+    pagination = student.assignments.order_by(Assignment.timestamp.desc()).paginate(
+        page, per_page=current_app.config['RWC_ASSIGNMENTS_PER_PAGE'],
         error_out=False)
-    posts = pagination.items
+    assignments = pagination.items
     prev = None
     if pagination.has_prev:
-        prev = url_for('api.get_user_posts', id=id, page=page-1)
+        prev = url_for('api.get_student_assignments', id=id, page=page-1)
     next = None
     if pagination.has_next:
-        next = url_for('api.get_user_posts', id=id, page=page+1)
+        next = url_for('api.get_student_assignments', id=id, page=page+1)
     return jsonify({
-        'posts': [post.to_json() for post in posts],
+        'assignements': [assign.to_json() for assign in assignments],
         'prev': prev,
         'next': next,
         'count': pagination.total
     })
 
 
-@api.route('/users/<int:id>/timeline/')
-def get_user_followed_posts(id):
-    user = User.query.get_or_404(id)
-    page = request.args.get('page', 1, type=int)
-    pagination = user.followed_posts.order_by(Post.timestamp.desc()).paginate(
-        page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
-        error_out=False)
-    posts = pagination.items
-    prev = None
-    if pagination.has_prev:
-        prev = url_for('api.get_user_followed_posts', id=id, page=page-1)
-    next = None
-    if pagination.has_next:
-        next = url_for('api.get_user_followed_posts', id=id, page=page+1)
-    return jsonify({
-        'posts': [post.to_json() for post in posts],
-        'prev': prev,
-        'next': next,
-        'count': pagination.total
-    })
+"""
+@api.route('/faculty/<int:id>/assignments/')
+"""
