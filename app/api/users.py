@@ -3,13 +3,13 @@ from . import api
 from ..models import User, Assignment, Student, Faculty
 
 
-@api.route('/users/<int:id>')
+#@api.route('/users/<int:id>')
 def get_user(id):
     user = User.query.get_or_404(id)
     return jsonify(user.to_json())
 
 
-@api.route('/student/<int:id>/assignments/')
+#@api.route('/student/<int:id>/assignments/')
 def get_student_assignments(id):
     student = Student.query.get_or_404(id)
     page = request.args.get('page', 1, type=int)

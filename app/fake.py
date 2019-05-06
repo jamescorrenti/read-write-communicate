@@ -122,8 +122,8 @@ def assignments(count=100):
     class_count = Class.query.count() - 1
     for i in range(count):
         c = Class.query.offset(randint(0, class_count)).first()
-        a = Assignment(body=fake.text(),
-                       timestamp=fake.past_date(),
+        a = Assignment(instructions=fake.text(),
+                       due_date=fake.past_date(),
                        class_id=c.id)
         db.session.add(a)
     db.session.commit()
