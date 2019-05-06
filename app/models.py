@@ -7,8 +7,8 @@ import bleach
 from flask import current_app, request, url_for
 from flask_login import UserMixin, AnonymousUserMixin
 from app.exceptions import ValidationError
-from . import db, login_manager
-
+from . import db, ma, login_manager
+from marshmallow import fields, ValidationError
 
 class Permission:
     CREATE_ASSIGNMENT = 4
@@ -186,7 +186,6 @@ class User(UserMixin, db.Model):
         db.session.add(self)
         return True
 
-
     def can(self, perm):
         return True
         #return self.role is not None and self.role.has_permission(perm)
@@ -206,7 +205,6 @@ class User(UserMixin, db.Model):
         hash = self.avatar_hash or self.gravatar_hash()
         return '{url}/{hash}?s={size}&d={default}&r={rating}'.format(
             url=url, hash=hash, size=size, default=default, rating=rating)
-
 
     def to_json(self):
         json_user = {
@@ -279,6 +277,7 @@ class Student(User):
     }
 
 
+
 class Class(db.Model):
     __tablename__ = "class"
     id = db.Column(db.Integer, primary_key=True)
@@ -289,7 +288,6 @@ class Class(db.Model):
     assignments = db.relationship("Assignment", back_populates="_class")
     # year = db.Column(db.Integer)
     # semester = db.Column(db.Integer)
-
 
 class AnonymousUser(AnonymousUserMixin):
     def can(self, permissions):
@@ -310,42 +308,12 @@ def load_user(user_id):
 class Assignment(db.Model):
     __tablename__ = 'assignment'
     id = db.Column(db.Integer, primary_key=True)
-    body = db.Column(db.Text)
-    body_html = db.Column(db.Text)
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    class_id = db.Column(db.Integer, db.ForeignKey('class.id'))
+    instructions = db.Column(db.Text)
+    due_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    class_id = db.Column(db.Integer, db.ForeignKey('class.id'), nullable=False)
     _class = db.relationship("Class", back_populates="assignments")
     questions = db.relationship("Question", back_populates="assignment")
     students = db.relationship("StudentAssignment", back_populates="assignment")
-
-    @staticmethod
-    def on_changed_body(target, value, oldvalue, initiator):
-        allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code',
-                        'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul',
-                        'h1', 'h2', 'h3', 'p']
-        target.body_html = bleach.linkify(bleach.clean(
-            markdown(value, output_format='html'),
-            tags=allowed_tags, strip=True))
-
-    def to_json(self):
-        json_assignment = {
-            'url': url_for('api.get_assignment', id=self.id),
-            'body': self.body,
-            'body_html': self.body_html,
-            'timestamp': self.timestamp,
-            'teacher_url': url_for('api.get_user', id=self.author_id),
-        }
-        return json_assignment
-
-    @staticmethod
-    def from_json(json_assignment):
-        body = json_assignment.get('body')
-        if body is None or body == '':
-            raise ValidationError('Assignment does not have a body')
-        return Assignment(body=body)
-
-
-db.event.listen(Assignment.body, 'set', Assignment.on_changed_body)
 
 
 class Question(db.Model):
@@ -353,17 +321,9 @@ class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     q = db.Column(db.Text)
     answer = db.Column(db.Text)
-    assignment = db.relationship("Assignment", back_populates="questions"   )
+    assignment = db.relationship("Assignment", back_populates="questions")
     assignment_id = db.Column(db.Integer, db.ForeignKey('assignment.id'))
-    """
-    @staticmethod
-    def on_changed_body(target, value, oldvalue, initiator):
-        allowed_tags = ['a', 'abbr', 'acronym', 'b', 'code', 'em', 'i',
-                        'strong']
-        target.body_html = bleach.linkify(bleach.clean(
-            markdown(value, output_format='html'),
-            tags=allowed_tags, strip=True))
-    """
+
     def to_json(self):
         json_question = {
             'url': url_for('api.get_question', id=self.id),
@@ -382,4 +342,60 @@ class Question(db.Model):
         return Question(body=body)
 
 
-#db.event.listen(Question.body, 'set', Question.on_changed_body)
+def requirement(data):
+    if not data:
+        raise ValidationError('Data not provided')
+
+
+class QuestionSchema(ma.ModelSchema):
+    class Meta:
+        model = Question
+
+
+class UserSchema(ma.ModelSchema):
+    class Meta:
+        model = User
+
+
+class SchoolUserSchema(ma.ModelSchema):
+    class Meta:
+        model = SchoolUser
+
+
+class FacultySchema(ma.ModelSchema):
+    class Meta:
+        model = Faculty
+
+
+class AssignmentSchema(ma.ModelSchema):
+    class Meta:
+        model = Assignment
+    class_id = fields.Int(required=True, validate=requirement)
+
+
+class ClassSchema(ma.ModelSchema):
+    class Meta:
+        model = Class
+
+
+class StudentSchema(ma.ModelSchema):
+    class Meta:
+        model = Student
+
+
+class SchoolSchema(ma.ModelSchema):
+    class Meta:
+        model = School
+
+
+class ClassStudentSchema(ma.ModelSchema):
+    class Meta:
+        model = ClassStudent
+
+
+class StudentAssignmentSchema(ma.ModelSchema):
+    class Meta:
+        model = StudentAssignment
+
+
+# db.event.listen(Question.body, 'set', Question.on_changed_body)

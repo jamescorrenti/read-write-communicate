@@ -5,7 +5,7 @@ from . import api
 from .decorators import permission_required
 
 
-@api.route('/question/')
+#@api.route('/question/')
 def get_questions():
     page = request.args.get('page', 1, type=int)
     pagination = Question.query.order_by(Question.timestamp.desc()).paginate(
@@ -26,13 +26,13 @@ def get_questions():
     })
 
 
-@api.route('/question/<int:id>')
+#@api.route('/question/<int:id>')
 def get_question(id):
     question = Question.query.get_or_404(id)
     return jsonify(question.to_json())
 
 
-@api.route('/assignment/<int:id>/questions/')
+#@api.route('/assignment/<int:id>/questions/')
 def get_assignment_questions(id):
     assignment = Assignment.query.get_or_404(id)
     page = request.args.get('page', 1, type=int)
