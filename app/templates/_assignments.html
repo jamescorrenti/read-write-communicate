@@ -5,12 +5,12 @@
         {% endif %}
     <li class="assignment">
         <div class="assign-thumbnail">
-            <a href="{{ url_for('.user', username=assignment._class.teacher.username) }}">
-                <img class="img-rounded profile-thumbnail" src="{{ assignment._class.teacher.gravatar(size=40) }}">
-            </a>
+            <!--<a href=" url_for('.user', username=assignment._class.teacher.username) }}">
+                <img class="img-rounded profile-thumbnail" src=" assignment._class.teacher.gravatar(size=40) }}">
+            </a>-->
         </div>
         <div class="assignment-content">
-            <div class="assignment-date">{{ moment(assignment.timestamp).fromNow() }}</div>
+            <div class="assignment-date">{{ moment(assignment.due_date).fromNow() }}</div>
             <div class="assignment-author"><a href="{{ url_for('._class', name=assignment._class.name) }}">{{ assignment._class.name}}</a></div>
             <div class="assignment-body">
                 {% if assignment.body_html %}
