@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for, abort, flash, request,\
-    current_app, make_response
+    current_app, make_response, send_file
 from flask_login import login_required, current_user
 from flask_sqlalchemy import get_debug_queries
 from . import main
@@ -34,30 +34,10 @@ def server_shutdown():
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
-    form = AssignmentForm()
+    print("hi")
+    print(url_for('static', filename='styles.css'))
+    return send_file('templates/static/index.html')
 
-    if current_user.can(Permission.CREATE_ASSIGNMENT) and form.validate_on_submit():
-        assign = Assignment(body=form.body.data)
-        db.session.add(assign)
-        db.session.commit()
-        return redirect(url_for('.index'))
-
-    page = request.args.get('page', 1, type=int)
-    _show_assignments = False
-    if current_user.is_authenticated:
-        _show_assignments = bool(request.cookies.get('show_assignments', ''))
-
-    if _show_assignments:
-        query = StudentAssignment.query.filter(StudentAssignment.student_id == current_user.id)
-    else:
-        query = Assignment.query
-    pagination = query.paginate(
-    # pagination = query.order_by(Assignment.timestamp.desc()).paginate(
-        page, per_page=current_app.config['RWC_ASSIGN_PER_PAGE'],
-        error_out=False)
-    assign = pagination.items
-    return render_template('index.html', form=form, assignments=assign,
-                           show_assignments=_show_assignments, pagination=pagination)
 
 
 @main.route('/user/<username>')
