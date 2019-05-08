@@ -34,10 +34,7 @@ def server_shutdown():
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
-    print("hi")
-    print(url_for('static', filename='styles.css'))
-    return send_file('templates/static/index.html')
-
+    return send_file('public/index.html')
 
 
 @main.route('/user/<username>')

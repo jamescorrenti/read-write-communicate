@@ -20,7 +20,7 @@ login_manager.login_view = 'auth.login'
 
 
 def create_app(config_name):
-    app = Flask(__name__)
+    app = Flask(__name__, static_folder='public', static_url_path="")
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
 
@@ -36,7 +36,6 @@ def create_app(config_name):
         from flask_sslify import SSLify
         sslify = SSLify(app)
 
-    
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
     
