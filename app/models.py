@@ -10,6 +10,7 @@ from app.exceptions import ValidationError
 from . import db, ma, login_manager
 from marshmallow import fields, ValidationError
 
+
 class Permission:
     CREATE_ASSIGNMENT = 4
     FOLLOW = 1
@@ -277,7 +278,6 @@ class Student(User):
     }
 
 
-
 class Class(db.Model):
     __tablename__ = "class"
     id = db.Column(db.Integer, primary_key=True)
@@ -370,7 +370,7 @@ class FacultySchema(ma.ModelSchema):
 class AssignmentSchema(ma.ModelSchema):
     class Meta:
         model = Assignment
-    class_id = fields.Int(required=True, validate=requirement)
+    class_id = fields.Int()
 
 
 class ClassSchema(ma.ModelSchema):
