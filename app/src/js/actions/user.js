@@ -38,6 +38,31 @@ export function loginUser(credentials,callback) {
     };
 }
 
+export function getCSRF() {
+    console.log("get csrf action")
+    return (dispatch) => {
+        const options = {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+        };
+        fetch("/auth/login", options)
+            .then(res => handleAPIErrors(res))        
+            .then(res => {  
+                console.log("get login form",res)    
+                return res.json()            
+            })
+            .then (res =>{ 
+                console.log("get login form json",json)               
+                dispatch({type:"SET_CSRF", csrf:"xxxxx" });
+            })
+            .catch(function(error) {
+                console.log("Token Fetch Error Error",error);
+            });           
+    };
+}
+
 export function logoutUser(callback) {
     return (dispatch) => {
         // const token = localStorage.getItem("token");

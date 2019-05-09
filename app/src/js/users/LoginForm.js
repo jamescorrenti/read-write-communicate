@@ -10,7 +10,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-import { loginUser } from '../actions/user';
+import { loginUser, getCSRF } from '../actions/user';
 
 class LoginForm extends React.Component {
   state = {
@@ -19,6 +19,9 @@ class LoginForm extends React.Component {
     password: ''
   };
 
+  componentDidMount() {
+    this.props.getCSRF()
+  }
   handleClickOpen = () => { this.setState({ open: true }); };
 
   handleClose = () => {
@@ -34,7 +37,7 @@ class LoginForm extends React.Component {
   };
 
   render() {
-    console.log('render login form!')
+    console.log('render login form !!!')
     return (
       <div>
         <Button variant="contained" onClick={this.handleClickOpen}>
@@ -43,6 +46,7 @@ class LoginForm extends React.Component {
         <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title" >
           <DialogTitle id="form-dialog-title">Sign In</DialogTitle>
           <DialogContent>
+            <TextField type="hidden" name="csrf" id="csrf" value={this.props.csrf} />
             <TextField autoFocus margin="dense" id="userid" label="User Id" type="text" fullWidth
               value={this.state.userid} onChange={e => this.setState({ userid: e.target.value })}
             />
@@ -64,5 +68,10 @@ class LoginForm extends React.Component {
   }
 }
 
-export default withRouter(connect(null,{loginUser})(LoginForm))
+const mapStateToProps = state => {
+  return {
+      csrf: state.user.csrf
+  }
+}    
+export default withRouter(connect(mapStateToProps,{loginUser, getCSRF})(LoginForm))
 
