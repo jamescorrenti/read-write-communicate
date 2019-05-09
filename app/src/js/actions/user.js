@@ -1,7 +1,8 @@
-
+import * as Cookies from 'js-cookie'
 function handleAPIErrors(res) {
     // this is needed to catch 404, 500 errors, etc.
     if (!res.ok) {
+        console.log("API errors",res)
         throw Error(res.statusText);
     }
     return res;   
@@ -35,31 +36,6 @@ export function loginUser(credentials,callback) {
         localStorage.setItem("token","rwc-test") 
         dispatch({type:"LOGIN_USER", token:"rwc-test", role:'student', id: 99, screenName: "Joe" });
         callback('student',99);  /* user id */        
-    };
-}
-
-export function getCSRF() {
-    console.log("get csrf action")
-    return (dispatch) => {
-        const options = {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json'
-            }
-        };
-        fetch("/auth/login", options)
-            .then(res => handleAPIErrors(res))        
-            .then(res => {  
-                console.log("get login form",res)    
-                return res.json()            
-            })
-            .then (res =>{ 
-                console.log("get login form json",json)               
-                dispatch({type:"SET_CSRF", csrf:"xxxxx" });
-            })
-            .catch(function(error) {
-                console.log("Token Fetch Error Error",error);
-            });           
     };
 }
 

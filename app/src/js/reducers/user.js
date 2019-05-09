@@ -4,7 +4,6 @@ const INITIAL_STATE = {
     screenName: '',
     role: '',
     userId: 0,
-    csrf: ''
 }
 export default function (
     state = INITIAL_STATE,
@@ -18,8 +17,6 @@ export default function (
         case "LOGOUT_USER":
                 return {...state, errorMessage: '', 
                     authenticated: '', userId: 0, screenName: '', type: ''}
-        case "SET_CSRF":
-            return {...state, csrf: action.csrf}
         default:
             return state;
     }

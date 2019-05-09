@@ -14,14 +14,23 @@ const config = {
  module: {
     rules: [
     {
-     test: /\.jsx?/,
-     loader: 'babel-loader',
-     exclude: /node_modules/,
+        test: /\.jsx?/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
     },
     {
         test: /\.css$/,
         loader: 'style-loader!css-loader?modules'
-    }]
+    },
+    {
+        test: /\.(jpg|png)$/,
+        use: {
+          loader: "url-loader",
+          options: {
+            limit: 25000,
+          },
+        },
+    },]
    }
 };
 module.exports = config;
