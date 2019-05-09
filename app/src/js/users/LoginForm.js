@@ -15,7 +15,7 @@ import { loginUser } from '../actions/user';
 class LoginForm extends React.Component {
   state = {
     open: false,
-    userid: '',
+    email: '',
     password: ''
   };
 
@@ -23,18 +23,18 @@ class LoginForm extends React.Component {
 
   handleClose = () => {
     this.setState({ open: false });
-    this.setState({ open: false, userid: '', password: '' });
+    this.setState({ open: false, email: '', password: '' });
   };
 
   handleLogin = () => {
     this.props.loginUser(this.state, (type,id) => {
       this.props.history.push(`/${type}s/${id}`)        
     });                 
-    this.setState({ open: false, userid: '', password: '' });
+    this.setState({ open: false, email: '', password: '' });
   };
 
   render() {
-    console.log('render login form !!!')
+    console.log('render login form')
     return (
       <div>
         <Button variant="contained" onClick={this.handleClickOpen}>
@@ -43,8 +43,8 @@ class LoginForm extends React.Component {
         <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title" >
           <DialogTitle id="form-dialog-title">Sign In</DialogTitle>
           <DialogContent>
-            <TextField autoFocus margin="dense" id="userid" label="User Id" type="text" fullWidth
-              value={this.state.userid} onChange={e => this.setState({ userid: e.target.value })}
+            <TextField autoFocus margin="dense" id="email" label="Email" type="text" fullWidth
+              value={this.state.email} onChange={e => this.setState({ email: e.target.value })}
             />
             <TextField margin="dense" id="password" label="Password" type="password" fullWidth
               value={this.state.password} onChange={e => this.setState({ password: e.target.value })}

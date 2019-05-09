@@ -9,7 +9,7 @@ import reduxThunk from 'redux-thunk';
 import App from './containers/App';
 import rootReducer from './reducers';
 import LandingPage from './containers/LandingPage'
-import StudentView from './containers/StudentView'
+import StudentView from './students/StudentView'
 
 const store = createStore(
     rootReducer,

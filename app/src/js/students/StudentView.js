@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 
 import SideMenu from '../components/SideMenu';
 import StudentDashboard from './StudentDashboard'
-import AssignmentsTable from './AssignmentsTable'
-import AssignmentUpload from './AssignmentUpload'
-import ContentArea from './ContentArea'
+import AssignmentsTable from '../containers/AssignmentsTable'
+import AssignmentUpload from '../containers/AssignmentUpload'
+import ContentArea from '../containers/ContentArea'
 
 class StudentView extends Component {
   state = {
-    options: [ 'Dashboard', 'Assignments', 'Assignment Upload' ],
+    options: [ 'Dashboard', 'Current Assignments', 'Submitted Assignments' ],
     selectedIndex: 0
   }
 

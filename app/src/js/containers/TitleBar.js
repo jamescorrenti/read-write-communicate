@@ -31,15 +31,5 @@ const mapStateToProps = state => {
 }
 
 export default connect(mapStateToProps)(TitleBar);
-/*
-    <AppBar >
-      <Toolbar >
-        <Grid justify="space-between" alignItems="center" container >
-          <Grid item><img src={logo} alt="Logo" style={{padding:'10'}} /></Grid>
-          <Grid item>{ (props.userLoggedIn) ? <UserMenu /> : <LoginForm /> }</Grid> 
-        </Grid>
-      </Toolbar>
-    </AppBar> 
-*/
 
 
