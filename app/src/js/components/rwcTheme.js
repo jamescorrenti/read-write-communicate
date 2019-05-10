@@ -18,7 +18,7 @@ export const rwcTheme = createMuiTheme({
         textTransform: 'none',
         backgroundColor: '#3B4B63',
         color: '#FFFFFF',
-      }
+      },
     },
     MuiSvgIcon: {  // Use Menu Button icons
       root: {
@@ -30,6 +30,12 @@ export const rwcTheme = createMuiTheme({
       contained: {
         backgroundColor: '#0D8087',
         color: '#FFFFFF'
+      }
+    },
+    // Buttons and Icons
+    MuiSvgIcon: {
+      root: {
+        fill:  '#6EBB91' /* '#0D8087' */
       }
     },
     // Tables
@@ -49,6 +55,9 @@ export const rwcTheme = createMuiTheme({
       head: {
         color: '#ffffff',
         backgroundColor: '#3B4B63',        
+      },
+      body: {
+        fontSize: '14px'
       }
     },
  }

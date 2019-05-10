@@ -6,6 +6,7 @@ import StudentOpenAssignments from './StudentOpenAssignments'
 import StudentSubmittedAssignments from './StudentSubmittedAssignments'
 import ContentArea from '../components/ContentArea'
 import AssignmentEdit from '../Assignments/AssignmentEdit'
+import AssignmentView from '../Assignments/AssignmentView'
 import { getOpenAssignments, getSubmittedAssignments } from '../actions/student'
 
 class StudentView extends Component {
@@ -27,13 +28,14 @@ class StudentView extends Component {
   };
 
   handleEdit = (index) => { this.setState({selectedIndex:2, assignmentId:index})}
-
+  handleView = (index) => { this.setState({selectedIndex:3, assignmentId:index})}
   getContentArea() {
     switch (this.state.selectedIndex) {
       // ToDo: Do we really need 2 different components?
       case 0: return <StudentOpenAssignments assignments={this.props.openAssignments} editCallback={this.handleEdit}/>
-      case 1: return <StudentSubmittedAssignments assignments={this.props.submittedAssignments} />
+      case 1: return <StudentSubmittedAssignments assignments={this.props.submittedAssignments}  viewCallback={this.handleView}/>
       case 2: return <AssignmentEdit id={this.state.assignmentId} />
+      case 3: return <AssignmentView id={this.state.assignmentId} />
     }
   }
   render() {

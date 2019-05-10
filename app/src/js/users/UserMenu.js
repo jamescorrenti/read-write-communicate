@@ -32,15 +32,18 @@ class UserMenu extends React.Component {
 
   render() {
     console.log('render user menu')
+    const iconWhite = {
+      fill: "#FFFFFF",
+    };
     const { anchorEl } = this.state;
     return (    
       <div>
         <Fab variant="extended" onClick={this.handleClick}
             aria-label="Delete" aria-haspopup="true"
             aria-owns={anchorEl ? 'user-menu' : undefined} >
-          <PersonIcon />                  
+          <PersonIcon style={iconWhite}/>                  
           {this.props.name}
-          <ArrowDropDownIcon /> 
+          <ArrowDropDownIcon style={iconWhite}/> 
         </Fab>
         <Menu id="user-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={this.handleClose} >
           <MenuItem onClick={this.handleLogout}>Logout</MenuItem>

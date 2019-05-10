@@ -15,24 +15,30 @@ const StudentOpenAssignments = (props) => {
     width: "5%",
   };
   const smallColumnStyle = {
-    width: "10%",
+    width: "12%",
   };
   const mediumColumnStyle = {
     wordWrap: "break-word",
-    width: "15%",
+    width: "20%",
+  };
+  const largeColumnStyle = {
+    wordWrap: "break-word",
+    width: "51%",
   };
   //ToDo: sort initially so in date order
   // ToDo: Support sorting date, class, etc.
+  /*           <TableCell style={iconColumnStyle} align="center"><EditIcon style={{ fontSize: 42 }} /></TableCell>
+  */
     return (
       <Paper >
       <Table >
         <TableHead>
           <TableRow>
-            <TableCell style={iconColumnStyle} align="center"><EditIcon style={{ fontSize: 42 }} /></TableCell>
-            <TableCell style={smallColumnStyle}>Due Date</TableCell>
+            <TableCell style={iconColumnStyle} ></TableCell>
+            <TableCell style={smallColumnStyle}>Date</TableCell>
             <TableCell style={smallColumnStyle}>Status</TableCell>
-            <TableCell style={mediumColumnStyle}>Title</TableCell>
-            <TableCell align='left'>Instructions</TableCell>
+            <TableCell style={mediumColumnStyle}>Class</TableCell>
+            <TableCell style={largeColumnStyle}>Title</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -41,13 +47,13 @@ const StudentOpenAssignments = (props) => {
               <TableRow key={row.id}>
                 <TableCell align="center" style={iconColumnStyle} component="th" scope="row">
                   <IconButton aria-label="Edit" onClick={() => props.editCallback(row.id) } >
-                    <EditIcon style={{ fontSize: 42 }}/>
+                    <EditIcon style={{ fontSize: 32 }}/>
                   </IconButton>   
                 </TableCell>
                 <TableCell style={smallColumnStyle}>{row.due_date}</TableCell>
-                <TableCell  style={smallColumnStyle}>{row.status}</TableCell>
-                <TableCell  style={mediumColumnStyle}>{row.title}</TableCell>
-                <TableCell align='left'>{row.instructions}</TableCell>
+                <TableCell style={smallColumnStyle}>{row.status}</TableCell>
+                <TableCell style={mediumColumnStyle}>{row.class.name}</TableCell>
+                <TableCell style={largeColumnStyle}>{row.title}</TableCell>
               </TableRow>
             );
           })}
