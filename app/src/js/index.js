@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import reduxThunk from 'redux-thunk';
 
-import App from './containers/App';
+import App from './components/App';
 import rootReducer from './reducers';
 import LandingPage from './components/LandingPage'
 import StudentView from './students/StudentView'

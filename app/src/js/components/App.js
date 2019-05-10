@@ -3,7 +3,7 @@ import React from 'react';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-import TitleBar from '../containers/TitleBar'
+import TitleBar from '../components/TitleBar'
 import { rwcTheme } from './rwcTheme'
 
 const divStyle = {
