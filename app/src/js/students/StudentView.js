@@ -1,25 +1,39 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import SideMenu from '../components/SideMenu';
-import StudentDashboard from './StudentDashboard'
-import AssignmentsTable from '../containers/AssignmentsTable'
-import AssignmentUpload from '../containers/AssignmentUpload'
-import ContentArea from '../containers/ContentArea'
+import StudentOpenAssignments from './StudentOpenAssignments'
+import StudentSubmittedAssignments from './StudentSubmittedAssignments'
+import ContentArea from '../components/ContentArea'
+import AssignmentEdit from '../Assignments/AssignmentEdit'
+import { getOpenAssignments, getSubmittedAssignments } from '../actions/student'
 
 class StudentView extends Component {
+  // ToDo: a little cryptic.  options array is for menu.  selected index is 
+  // options + edit (and maybe other things)
   state = {
-    options: [ 'Dashboard', 'Current Assignments', 'Submitted Assignments' ],
-    selectedIndex: 0
+    options: [ 'Current Assignments', 'Submitted Assignments' ],
+    selectedIndex: 0,
+    assignmentId: -1
+  }
+
+  componentDidMount() {
+    // ToDo: here or in child components?  redux action needed?  how to handle updates
+    this.props.getOpenAssignments()
+    this.props.getSubmittedAssignments()
   }
 
   handleSelection = (index) => { this.setState({selectedIndex: index}); 
   };
 
+  handleEdit = (index) => { this.setState({selectedIndex:2, assignmentId:index})}
+
   getContentArea() {
     switch (this.state.selectedIndex) {
-      case 0: return <StudentDashboard />
-      case 1: return <AssignmentsTable />
-      case 2: return <AssignmentUpload />
+      // ToDo: Do we really need 2 different components?
+      case 0: return <StudentOpenAssignments assignments={this.props.openAssignments} editCallback={this.handleEdit}/>
+      case 1: return <StudentSubmittedAssignments assignments={this.props.submittedAssignments} />
+      case 2: return <AssignmentEdit id={this.state.assignmentId} />
     }
   }
   render() {
@@ -32,4 +46,14 @@ class StudentView extends Component {
   }
 }
 
-export default StudentView;
+const mapStateToProps = state => {
+  return {
+    openAssignments: state.student.openAssignments,
+    submittedAssignments: state.student.submittedAssignments
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  {getOpenAssignments,getSubmittedAssignments}
+)(StudentView)

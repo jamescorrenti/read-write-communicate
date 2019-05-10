@@ -34,7 +34,6 @@ class LoginForm extends React.Component {
   };
 
   render() {
-    console.log('render login form')
     return (
       <div>
         <Button variant="contained" onClick={this.handleClickOpen}>
@@ -63,6 +62,6 @@ class LoginForm extends React.Component {
     );
   }
 }
- 
+
 export default withRouter(connect(null,{loginUser})(LoginForm))
 

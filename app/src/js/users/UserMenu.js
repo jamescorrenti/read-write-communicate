@@ -31,6 +31,7 @@ class UserMenu extends React.Component {
   };
 
   render() {
+    console.log('render user menu')
     const { anchorEl } = this.state;
     return (    
       <div>
@@ -51,7 +52,7 @@ class UserMenu extends React.Component {
 
 const mapStateToProps = state => {
   return {
-      name: state.user.screenName
+      name: state.user.screenName,
   }
 }    
 

@@ -8,7 +8,7 @@ import reduxThunk from 'redux-thunk';
 
 import App from './containers/App';
 import rootReducer from './reducers';
-import LandingPage from './containers/LandingPage'
+import LandingPage from './components/LandingPage'
 import StudentView from './students/StudentView'
 
 const store = createStore(
@@ -24,9 +24,9 @@ ReactDOM.render(
         <BrowserRouter>
             <App>
                 <Route exact path="/" component={LandingPage} />
-                <Route path="/students/:id" component={StudentView} />          
+                <Route path="/students/:id" component={StudentView} />        
             </App>
         </BrowserRouter>
     </Provider>,
-  document.getElementById('content')
+  document.getElementById('root')
 )
