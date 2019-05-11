@@ -1,6 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 
+// ToDo: move this styling code
 const styles = theme => ({
   content: {
     flexGrow: 1,

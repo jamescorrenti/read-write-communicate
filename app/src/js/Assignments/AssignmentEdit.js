@@ -32,7 +32,10 @@ class AssignmentEdit extends Component {
             class={this.props.assignment.assignment.class.name} 
             instructions={this.props.assignment.assignment.instructions}
           />
-          <AssignmentWork question={this.props.assignment.assignment.questions[0].q}/>
+          <AssignmentWork 
+            question={this.props.assignment.assignment.questions[0].q}
+            answer={this.props.assignment.assignment.questions[0].answer}
+          />
         </React.Fragment>      
     )      
   }

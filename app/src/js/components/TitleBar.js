@@ -11,13 +11,13 @@ import LoginForm from '../users/LoginForm'
 import logo from '../images/logo.png';
 
 const TitleBar = (props) => {
-  console.log('render titlebar now',props.userLoggedIn)
+  const { userLoggedIn } = props; 
   return(
     <AppBar >
       <Toolbar >
         <Grid justify="space-between" alignItems="center" container >
           <Grid item><img src={logo} alt="Logo" style={{padding:'10'}} /></Grid>
-          <Grid item>{ (props.userLoggedIn) ? <UserMenu /> : <LoginForm /> }</Grid>  
+          <Grid item>{ (userLoggedIn) ? <UserMenu /> : <LoginForm /> }</Grid>  
         </Grid>
       </Toolbar>
     </AppBar>  
