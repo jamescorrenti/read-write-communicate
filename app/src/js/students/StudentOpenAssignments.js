@@ -27,8 +27,7 @@ const StudentOpenAssignments = (props) => {
   };
   //ToDo: sort initially so in date order
   // ToDo: Support sorting date, class, etc.
-  /*           <TableCell style={iconColumnStyle} align="center"><EditIcon style={{ fontSize: 42 }} /></TableCell>
-  */
+
     return (
       <Paper >
       <Table >

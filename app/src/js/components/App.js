@@ -4,6 +4,7 @@ import { MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import TitleBar from '../components/TitleBar'
+import Footer from '../components/Footer'
 import { rwcTheme } from './rwcTheme'
 
 const divStyle = {
@@ -17,6 +18,7 @@ function App({children}) {
         <CssBaseline />
         <TitleBar />
         { children }
+        <Footer />
       </div>
     </MuiThemeProvider>
   );

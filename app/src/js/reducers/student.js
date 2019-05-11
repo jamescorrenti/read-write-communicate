@@ -1,6 +1,7 @@
 const INITIAL_STATE = {
     openAssignments: [],
-    submittedAssignments: []
+    submittedAssignments: [],
+    assignment: null
 }
 export default function (
     state = INITIAL_STATE,
@@ -12,6 +13,8 @@ export default function (
             return {...state, openAssignments: action.payload}
         case "STUDENT_SUBMITTED_ASSIGNMENTS":
             return {...state, submittedAssignments: action.payload}
+        case "STUDENT_ASSIGNMENT":
+            return {...state, assignment: action.payload}
         default:
             return state;
     }

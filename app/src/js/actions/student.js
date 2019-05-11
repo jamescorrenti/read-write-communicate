@@ -33,4 +33,18 @@ export function getSubmittedAssignments() {
     };
 }
 
+export function getStudentAssignment(id) {
+    return (dispatch) => {
+    
+// Fake code for not using backend 
+        dispatch({type:"STUDENT_ASSIGNMENT", payload: {
+            id: 0, 
+            assignment: {
+                name: 'Assignment 1', instructions: "don't cheat",
+                class: {name: "Social Studies"}, 
+                questions: [{q:'Is President Trump a good president?', answer:'Let me think about it'}]
+            },
+        }});  
+    };
+}
 
