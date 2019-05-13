@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 
 import AssignmentHeader from '../Assignments/AssignmentHeader'
 import AssignmentWork from '../Assignments/AssignmentWork'
-import { getStudentAssignment } from '../actions/student'
+import { getStudentAssignment, updateStudentAssignment, submitStudentAssignment } from '../actions/student'
 
 class AssignmentEdit extends Component {
 
@@ -14,6 +14,13 @@ class AssignmentEdit extends Component {
     this.props.getStudentAssignment(this.props.id)
   }
  
+  onEditCancel = () => {this.props.completeCB()}
+  onEditSave = (assignment) => {
+    this.props.updateStudentAssignment(this.props.assignment.id,assignment);
+  } 
+  onEditSubmit = (assignment) => {
+    this.props.submitStudentAssignment(this.props.assignment.id,assignment, this.props.completeCB);
+  }
   render() {
 
        if (this.props.assignment === null) 
@@ -35,6 +42,9 @@ class AssignmentEdit extends Component {
           <AssignmentWork 
             question={this.props.assignment.assignment.questions[0].q}
             answer={this.props.assignment.assignment.questions[0].answer}
+            cancel={this.onEditCancel}
+            submit={this.onEditSubmit}
+            save={this.onEditSave}
           />
         </React.Fragment>      
     )      
@@ -51,5 +61,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  {getStudentAssignment}
+  {getStudentAssignment, updateStudentAssignment, submitStudentAssignment}
 )(AssignmentEdit)

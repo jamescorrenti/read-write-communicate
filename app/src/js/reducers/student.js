@@ -15,6 +15,8 @@ export default function (
             return {...state, submittedAssignments: action.payload}
         case "STUDENT_ASSIGNMENT":
             return {...state, assignment: action.payload}
+        case "UPDATE_STUDENT_ASSIGNMENT":
+            return {...state, assignment: {...state.assignment, answer:action.payload}    }         
         default:
             return state;
     }

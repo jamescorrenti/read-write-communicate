@@ -38,13 +38,30 @@ export function getStudentAssignment(id) {
     
 // Fake code for not using backend 
         dispatch({type:"STUDENT_ASSIGNMENT", payload: {
-            id: 0, 
+            id: 42, 
             assignment: {
                 name: 'Assignment 1', instructions: "don't cheat",
                 class: {name: "Social Studies"}, 
                 questions: [{q:'Is President Trump a good president?', answer:'Let me think about it'}]
             },
         }});  
+    };
+}
+
+// ToDo: Really don't need redux here - just want to tell backend to do its thing and report any errors
+export function updateStudentAssignment(id,newWork) {
+    return (dispatch) => {
+        console.log("Updating student assignment id",id,' new writing',newWork)
+        dispatch({type:"UPDATE_STUDENT_ASSIGNMENT", payload: {
+            answer: newWork
+        }});  
+    };
+}
+
+export function submitStudentAssignment(id,newWork,cb) {
+    return (dispatch) => {
+        console.log("Submit student assignment id",id,' new writing',newWork)
+        cb();
     };
 }
 

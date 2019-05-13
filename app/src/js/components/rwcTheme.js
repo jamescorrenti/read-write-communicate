@@ -1,8 +1,21 @@
 
 import { createMuiTheme } from '@material-ui/core/styles';
-
+// chicken and egg.  In rwcTheme, want to reference the palette colors
+// but they don't seem to be know yet...
+export const colors = {
+  primary: '#0D8087',
+  secondary: '#3B4B63'
+}
 
 export const rwcTheme = createMuiTheme({
+  palette: {
+    primary: {
+      main: colors.primary
+    },
+    secondary: {
+      main: colors.secondary
+    },
+  },
   overrides: {
     // Title Bar
     MuiAppBar: {      
@@ -16,7 +29,7 @@ export const rwcTheme = createMuiTheme({
     MuiFab: {   // User Menu Button
       root: {
         textTransform: 'none',
-        backgroundColor: '#3B4B63',
+        backgroundColor: colors.secondary,
         color: '#FFFFFF',
       },
     },
@@ -28,7 +41,7 @@ export const rwcTheme = createMuiTheme({
     },
     MuiButton: { // Signin button
       contained: {
-        backgroundColor: '#0D8087',
+        backgroundColor: colors.primary,
         color: '#FFFFFF'
       }
     },
