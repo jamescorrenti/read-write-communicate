@@ -45,6 +45,12 @@ export const rwcTheme = createMuiTheme({
         color: '#FFFFFF'
       }
     },
+    MuiDialogTitle: { // Signin Dialog
+      root: {
+        display: 'flex',
+        justifyContent: 'center'
+      }
+    },
     // Buttons and Icons
     MuiSvgIcon: {
       root: {

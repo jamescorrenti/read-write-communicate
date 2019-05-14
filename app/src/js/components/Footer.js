@@ -11,10 +11,13 @@ const Footer = (props) => {
         position: 'absolute',
         bottom: '0',
         width: '100%',
-        padding: '5px'
+        padding: '5px',
+        zIndex: 1201, //theme.zIndex.drawer + 1,
+        backgroundColor: '#FFFFFF'
      };
      const textStyle = {
-        fontSize: "14px",
+        fontSize: '14px',
+        fontFamily:  'Roboto'
      };
 
     return (

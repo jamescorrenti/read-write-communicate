@@ -10,6 +10,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
+import logo from '../images/logo.png';
 import { loginUser } from '../actions/user';
 
 class LoginForm extends React.Component {
@@ -39,8 +40,11 @@ class LoginForm extends React.Component {
         <Button variant="contained" onClick={this.handleClickOpen}>
           Sign In
         </Button>
-        <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title" >
-          <DialogTitle id="form-dialog-title">Sign In</DialogTitle>
+        <Dialog open={this.state.open} onClose={this.handleClose} 
+                aria-labelledby="form-dialog-title" >
+          <DialogTitle id="form-dialog-title">
+            <img src={logo} alt="Logo" style={{padding:'10'}} />
+          </DialogTitle>
           <DialogContent>
             <TextField autoFocus margin="dense" id="email" label="Email" type="text" fullWidth
               value={this.state.email} onChange={e => this.setState({ email: e.target.value })}

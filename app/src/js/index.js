@@ -10,6 +10,7 @@ import App from './components/App';
 import rootReducer from './reducers';
 import LandingPage from './components/LandingPage'
 import StudentView from './students/StudentView'
+import TeacherView from './teachers/TeacherView'
 
 const store = createStore(
     rootReducer,
@@ -24,7 +25,8 @@ ReactDOM.render(
         <BrowserRouter>
             <App>
                 <Route exact path="/" component={LandingPage} />
-                <Route path="/students/:id" component={StudentView} />        
+                <Route path="/students/:id" component={StudentView} />   
+                <Route path="/teachers/:id" component={TeacherView} />       
             </App>
         </BrowserRouter>
     </Provider>,

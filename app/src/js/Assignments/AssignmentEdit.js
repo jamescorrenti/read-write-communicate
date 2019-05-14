@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
-import AssignmentHeader from '../Assignments/AssignmentHeader'
-import AssignmentWork from '../Assignments/AssignmentWork'
+import AssignmentHeader from './AssignmentHeader'
+import AssignmentWork from './AssignmentWork'
 import { getStudentAssignment, updateStudentAssignment, submitStudentAssignment } from '../actions/student'
 
 class AssignmentEdit extends Component {

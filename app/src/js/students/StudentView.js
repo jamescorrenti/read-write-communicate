@@ -5,8 +5,8 @@ import SideMenu from '../components/SideMenu';
 import StudentOpenAssignments from './StudentOpenAssignments'
 import StudentSubmittedAssignments from './StudentSubmittedAssignments'
 import ContentArea from '../components/ContentArea'
-import AssignmentEdit from '../Assignments/AssignmentEdit'
-import AssignmentView from '../Assignments/AssignmentView'
+import AssignmentEdit from '../assignments/AssignmentEdit'
+import AssignmentView from '../assignments/AssignmentView'
 import { getOpenAssignments, getSubmittedAssignments } from '../actions/student'
 
 class StudentView extends Component {

@@ -3,7 +3,7 @@ const INITIAL_STATE = {
     errorMessage: '',
     screenName: '',
     role: '',
-    userId: 0,
+    id: 0,
 }
 export default function (
     state = INITIAL_STATE,
@@ -13,10 +13,10 @@ export default function (
     switch (action.type) { 
         case "LOGIN_USER":
             return {...state, errorMessage: '', 
-                authenticated: action.token, userId: action.id, screenName: action.name, role: 'student'}
+                authenticated: action.token, id: action.id, screenName: action.name, role: 'student'}
         case "LOGOUT_USER":
                 return {...state, errorMessage: '', 
-                    authenticated: '', userId: 0, screenName: '', type: ''}
+                    authenticated: '', id: 0, screenName: '', type: ''}
         default:
             return state;
     }
