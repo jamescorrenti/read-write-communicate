@@ -7,7 +7,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
-import DetailsIcon from '@material-ui/icons/Details';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 
 const StudentSubmittedAssignments = (props) => {
 
@@ -44,7 +44,7 @@ const StudentSubmittedAssignments = (props) => {
               <TableRow key={row.id}>
                 <TableCell align="center" style={iconColumnStyle} component="th" scope="row">
                   <IconButton aria-label="View" onClick={() => props.viewCallback(row.id) } >
-                    <DetailsIcon style={{ fontSize: 32 }}/>
+                    <AssignmentIcon style={{ fontSize: 32 }}/>
                   </IconButton>   
                 </TableCell>
                 <TableCell style={smallColumnStyle}>{row.submit_date}</TableCell>
