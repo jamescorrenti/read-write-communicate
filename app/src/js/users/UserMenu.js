@@ -11,7 +11,7 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import PersonIcon from '@material-ui/icons/Person';
 
 import { logoutUser } from '../actions/user';
-
+import { colors } from '../styles/rwcTheme'
 class UserMenu extends React.Component {
   state = {
     anchorEl: null,
@@ -31,16 +31,15 @@ class UserMenu extends React.Component {
   };
 
   render() {
-    console.log('render user menu')
     const iconWhite = {
-      fill: "#FFFFFF",
+      fill: colors.textContrast,
     };
     const { anchorEl } = this.state;
     return (    
       <div>
         <Fab variant="extended" onClick={this.handleClick}
             aria-label="Delete" aria-haspopup="true"
-            aria-owns={anchorEl ? 'user-menu' : undefined} >
+            aria-owns={anchorEl ? "user-menu" : undefined} >
           <PersonIcon style={iconWhite}/>                  
           {this.props.name}
           <ArrowDropDownIcon style={iconWhite}/> 

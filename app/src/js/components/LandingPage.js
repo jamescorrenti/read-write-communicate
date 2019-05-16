@@ -19,12 +19,12 @@ class LandingPage extends Component {
     const { classes } = this.props; 
     if (this.props.userLoggedIn)
       return ( 
-        <Redirect to={{pathname: `/${this.props.userRole}s/${this.props.userId}`  }} /> 
+        <Redirect to={{pathname: `/dasboard`}} /> 
     )            
     else return (
       <main className={classes.content}>
-  <Typography paragraph>Landing Page - Placeholder</Typography>
-</main>
+        <Typography paragraph>Landing Page - Placeholder</Typography>
+      </main>
     )      
   }
 }
@@ -33,8 +33,6 @@ class LandingPage extends Component {
 const mapStateToProps = state => {
   return {
     userLoggedIn: state.user.isLoggedIn,
-    userId: state.user.userId,
-    userRole: state.user.role
   }
 }
 

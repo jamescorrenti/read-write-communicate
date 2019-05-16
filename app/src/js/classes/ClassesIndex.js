@@ -1,13 +1,22 @@
-import React, { Component } from 'react';
+import React from 'react'
 
+import { connect } from 'react-redux';
 import Typography from '@material-ui/core/Typography';
-
 const ClassesIndex = (props) => {
-    return (
-        <Typography>
-            Classes Index Placeholder for teacher {props.teacherId}
-        </Typography>
-    )
+  
+  return(
+    <Typography component="p" >
+        Classes Index placeholder
+    </Typography>  
+  )
 }
 
-export default ClassesIndex;
+const mapStateToProps = state => {
+  return {
+
+  }
+}
+
+export default connect(mapStateToProps)(ClassesIndex);
+
+

@@ -9,7 +9,6 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
 import logo from '../images/logo.png';
 import { loginUser } from '../actions/user';
 
@@ -28,8 +27,8 @@ class LoginForm extends React.Component {
   };
 
   handleLogin = () => {
-    this.props.loginUser(this.state, (type,id) => {
-      this.props.history.push(`/${type}s/${id}`)        
+    this.props.loginUser(this.state, () => {
+      this.props.history.push(`/dashboard`)        
     });                 
     this.setState({ open: false, email: '', password: '' });
   };
@@ -43,21 +42,29 @@ class LoginForm extends React.Component {
         <Dialog open={this.state.open} onClose={this.handleClose} 
                 aria-labelledby="form-dialog-title" >
           <DialogTitle id="form-dialog-title">
-            <img src={logo} alt="Logo" style={{padding:'10'}} />
+            <img src={logo} alt="Logo" style={{padding:"10"}} />
           </DialogTitle>
           <DialogContent>
-            <TextField autoFocus margin="dense" id="email" label="Email" type="text" fullWidth
-              value={this.state.email} onChange={e => this.setState({ email: e.target.value })}
+            <TextField
+                autoFocus required
+                variant="outlined" margin="normal" fullWidth
+                id="email" label="Email" type="text" 
+                value={this.state.email} 
+                onChange={e => this.setState({ email: e.target.value })}
             />
-            <TextField margin="dense" id="password" label="Password" type="password" fullWidth
-              value={this.state.password} onChange={e => this.setState({ password: e.target.value })}
+            <TextField 
+                required
+                variant="outlined" margin="normal" fullWidth
+                id="password" label="Password" type="password" 
+                value={this.state.password} 
+                onChange={e => this.setState({ password: e.target.value })}
             />
           </DialogContent>
           <DialogActions>
-            <Button variant="outlined" onClick={this.handleClose} >
+            <Button variant="contained" onClick={this.handleClose} >
               Cancel
             </Button>
-            <Button variant="outlined" onClick={this.handleLogin} >
+            <Button variant="contained" onClick={this.handleLogin} >
               Sign In
             </Button>
           </DialogActions>
