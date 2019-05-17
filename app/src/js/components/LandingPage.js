@@ -19,22 +19,20 @@ class LandingPage extends Component {
     const { classes } = this.props; 
     if (this.props.userLoggedIn)
       return ( 
-        // ToDo: this is wrong
-        <Redirect to={{pathname: `/users/${this.props.userId}`  }} /> 
+        <Redirect to={{pathname: `/dasboard`}} /> 
     )            
     else return (
       <main className={classes.content}>
-      <div className={classes.toolbar} />
-  <Typography paragraph>Landing Page - Placeholder</Typography>
-</main>
+        <Typography paragraph>Landing Page - Placeholder</Typography>
+      </main>
     )      
   }
 }
 
+
 const mapStateToProps = state => {
   return {
     userLoggedIn: state.user.isLoggedIn,
-    userId: state.user.userId
   }
 }
 

@@ -2,10 +2,15 @@ import React from 'react';
 
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import { BrowserRouter } from 'react-router-dom';
 
+import SideMenu from './SideMenu';
+import ContentArea from '../components/ContentArea'
 import TitleBar from '../components/TitleBar'
 import Footer from '../components/Footer'
-import { rwcTheme } from './rwcTheme'
+
+import { rwcTheme } from '../styles/rwcTheme'
+import getRoutes from '../routes'
 
 const divStyle = {
   display: 'flex'
@@ -16,8 +21,13 @@ function App({children}) {
     <MuiThemeProvider theme={rwcTheme}>
       <div style={divStyle}>
         <CssBaseline />
-        <TitleBar />
-        { children }
+        <BrowserRouter>
+          <TitleBar />
+          <SideMenu />
+          <ContentArea>
+            {getRoutes()}
+          </ContentArea>    
+        </BrowserRouter>    
         <Footer />
       </div>
     </MuiThemeProvider>

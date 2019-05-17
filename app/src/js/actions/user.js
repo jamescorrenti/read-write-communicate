@@ -1,12 +1,4 @@
-import * as Cookies from 'js-cookie'
-function handleAPIErrors(res) {
-    // this is needed to catch 404, 500 errors, etc.
-    if (!res.ok) {
-        console.log("API errors",res)
-        throw Error(res.statusText);
-    }
-    return res;   
-}
+import { handleAPIErrors } from './handleAPIErrors';
 
 export function loginUser(credentials,callback) {
     return (dispatch) => {
@@ -37,7 +29,9 @@ export function loginUser(credentials,callback) {
 // Fake code for not using backend for login
         localStorage.setItem("token","rwc-test") 
         dispatch({type:"LOGIN_USER", token:"rwc-test", role:'student', id: 99, name: "Joe" });
-        callback('student',99);  /* user id */        
+        callback(); 
+        // dispatch({type:"LOGIN_USER", token:"rwc-test", role:'teacher', id: 65, name: "Kumu" });
+        // callback();                 
     };
 }
 

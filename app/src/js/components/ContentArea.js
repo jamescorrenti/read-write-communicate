@@ -1,6 +1,8 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
 
+import Typography from '@material-ui/core/Typography';
+
 // ToDo: move this styling code
 const styles = theme => ({
   content: {
@@ -11,11 +13,11 @@ const styles = theme => ({
 });
 
 const ContentArea = (props) => {
-    const { classes } = props; 
+    const { classes, children } = props; 
     return (
         <main className={classes.content}>
             <div className={classes.toolbar} />
-            {props.type}
+            {children}
         </main>
     )      
   }

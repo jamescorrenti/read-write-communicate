@@ -1,20 +1,14 @@
 const INITIAL_STATE = {
-    openAssignments: [],
-    submittedAssignments: [],
-    assignment: null
+    students: [],
 }
 export default function (
     state = INITIAL_STATE,
     action
 ){
-   console.log("Student Reducer",action.type);
+  // console.log("Student Reducer",action.type);
     switch (action.type) { 
-        case "STUDENT_OPEN_ASSIGNMENTS":
-            return {...state, openAssignments: action.payload}
-        case "STUDENT_SUBMITTED_ASSIGNMENTS":
-            return {...state, submittedAssignments: action.payload}
-        case "STUDENT_ASSIGNMENT":
-            return {...state, assignment: action.payload}
+        case "SET_STUDENTS":
+            return {...state, students: action.payload}    
         default:
             return state;
     }
