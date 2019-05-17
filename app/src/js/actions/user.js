@@ -28,10 +28,10 @@ export function loginUser(credentials,callback) {
 //             });    
 // Fake code for not using backend for login
         localStorage.setItem("token","rwc-test") 
-        dispatch({type:"LOGIN_USER", token:"rwc-test", role:'student', id: 99, name: "Joe" });
-        callback(); 
-        // dispatch({type:"LOGIN_USER", token:"rwc-test", role:'teacher', id: 65, name: "Kumu" });
-        // callback();                 
+        // dispatch({type:"LOGIN_USER", token:"rwc-test", role:'student', id: 99, name: "Joe" });
+        // callback(); 
+        dispatch({type:"LOGIN_USER", token:"rwc-test", role:'teacher', id: 65, name: "Kumu" });
+        callback();                 
     };
 }
 

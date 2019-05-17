@@ -43,22 +43,21 @@ class StudentAssignmentEdit extends Component {
       );
 
    return (
-    <React.Fragment>
-      <AssignmentHeader 
-        title={this.props.assignment.name}
-        class={this.props.assignment.class.name} 
-        instructions={this.props.assignment.instructions}
-      />
-      <AssignmentWork 
-        question={this.props.assignment.questions[0].q}
-        answer={this.props.assignment.questions[0].answer}
-        cancel={this.onEditCancel}
-        submit={this.onEditSubmit}
-        save={this.onEditSave}
-      />
-    </React.Fragment>      
-)      
-   
+      <React.Fragment>
+        <AssignmentHeader 
+          title={this.props.assignment.name}
+          class={this.props.assignment.class.name} 
+          instructions={this.props.assignment.instructions}
+        />
+        <AssignmentWork 
+          question={this.props.assignment.questions[0].q}
+          answer={this.props.assignment.questions[0].answer}
+          cancel={this.onEditCancel}
+          submit={this.onEditSubmit}
+          save={this.onEditSave}
+        />
+      </React.Fragment>      
+    )      
   }
 }
 

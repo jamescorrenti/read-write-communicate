@@ -11,7 +11,8 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import PersonIcon from '@material-ui/icons/Person';
 
 import { logoutUser } from '../actions/user';
-import { colors } from '../styles/rwcTheme'
+import { colors } from '../styles/colors';
+
 class UserMenu extends React.Component {
   state = {
     anchorEl: null,

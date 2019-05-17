@@ -2,16 +2,13 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 // chicken and egg.  In rwcTheme, want to reference the palette colors
 // but they don't seem to be know yet...
-export const colors = {
-  primary: '#0D8087',
-  secondary: '#3B4B63',
-  textContrast: '#FFFFFF'
-}
+import { colors } from './colors'
 
 export const rwcTheme = createMuiTheme({
   palette: {
     primary: {
-      main: colors.primary
+      main: colors.primary,
+      light: colors.grey
     },
     secondary: {
       main: colors.secondary

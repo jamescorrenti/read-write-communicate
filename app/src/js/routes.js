@@ -7,6 +7,7 @@ import StudentAssignmentView from './studentAssignments/StudentAssignmentView';
 import StudentAssignmentEdit from './studentAssignments/StudentAssignmentEdit';
 
 import AssignmentsIndex from './assignments/AssignmentsIndex';
+import AssignmentNew from './assignments/AssignmentNew';
 
 import StudentsIndex from './students/StudentsIndex';
 
@@ -34,6 +35,7 @@ export default function getRoutes () {
             <Route path="/classes/:id" component={ClsView} />
 
             <Route exact path="/assignments" component={AssignmentsIndex} />   
+            <Route exact path="/assignments/new" component={AssignmentNew} /> 
 
             <Route exact path="/students" component={StudentsIndex} />  
         </Switch>

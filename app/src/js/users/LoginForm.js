@@ -1,7 +1,4 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom'
-
-import { connect } from 'react-redux';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
@@ -10,69 +7,48 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import logo from '../images/logo.png';
-import { loginUser } from '../actions/user';
 
-class LoginForm extends React.Component {
-  state = {
-    open: false,
-    email: '',
-    password: ''
-  };
+function LoginForm (props) {
+  
+  const {open, handleOpen, handleClose, onChange, handleLogin} = props;
+  const cancelButtonStyle = {
+    backgroundColor: "#b7b7b7",
+  };  
 
-  handleClickOpen = () => { this.setState({ open: true }); };
-
-  handleClose = () => {
-    this.setState({ open: false });
-    this.setState({ open: false, email: '', password: '' });
-  };
-
-  handleLogin = () => {
-    this.props.loginUser(this.state, () => {
-      this.props.history.push(`/dashboard`)        
-    });                 
-    this.setState({ open: false, email: '', password: '' });
-  };
-
-  render() {
-    return (
-      <div>
-        <Button variant="contained" onClick={this.handleClickOpen}>
-          Sign In
-        </Button>
-        <Dialog open={this.state.open} onClose={this.handleClose} 
-                aria-labelledby="form-dialog-title" >
-          <DialogTitle id="form-dialog-title">
-            <img src={logo} alt="Logo" style={{padding:"10"}} />
-          </DialogTitle>
-          <DialogContent>
-            <TextField
-                autoFocus required
-                variant="outlined" margin="normal" fullWidth
-                id="email" label="Email" type="text" 
-                value={this.state.email} 
-                onChange={e => this.setState({ email: e.target.value })}
-            />
-            <TextField 
-                required
-                variant="outlined" margin="normal" fullWidth
-                id="password" label="Password" type="password" 
-                value={this.state.password} 
-                onChange={e => this.setState({ password: e.target.value })}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button variant="contained" onClick={this.handleClose} >
-              Cancel
-            </Button>
-            <Button variant="contained" onClick={this.handleLogin} >
-              Sign In
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <Button variant="contained" onClick={handleOpen}>
+        Sign In
+      </Button>
+      <Dialog open={open} onClose={handleClose} 
+              aria-labelledby="form-dialog-title" >
+        <DialogTitle id="form-dialog-title">
+          <img src={logo} alt="Logo" style={{padding:"10"}} />
+        </DialogTitle>
+        <DialogContent>
+          <TextField autoFocus required
+              variant="outlined" margin="normal" fullWidth
+              id="email" label="Email" type="text" 
+              onChange={e => onChange(e)}
+          />
+          <TextField required
+              variant="outlined" margin="normal" fullWidth
+              id="password" label="Password" type="password" 
+              onChange={e => onChange(e)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" onClick={handleClose} style={cancelButtonStyle}>
+            Cancel
+          </Button>
+          <Button variant="contained" onClick={handleLogin} >
+            Sign In
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
 }
 
-export default withRouter(connect(null,{loginUser})(LoginForm))
+export default LoginForm;
 

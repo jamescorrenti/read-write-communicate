@@ -9,9 +9,15 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
-import AssignmentIcon from '@material-ui/icons/Assignment';
+import Button from '@material-ui/core/Button';
+
+import AddIcon from '@material-ui/icons/Add';
+
+import { iconColumnStyle, smallColumnStyle, mediumColumnStyle, largeColumnStyle } 
+  from '../styles/tableStyles';
 
 import { getAssignments } from '../actions/assignment';
 
@@ -25,48 +31,47 @@ class AssignmentIndex extends Component {
   }
 
   render() {
-    const iconColumnStyle = {
-      width: "5%",
-    };
-    const smallColumnStyle = {
-      width: "12%",
-    };
-    const mediumColumnStyle = {
-      wordWrap: "break-word",
-      width: "20%",
-    };
-    const largeColumnStyle = {
-      wordWrap: "break-word",
-      width: "51%",
-    };
     //ToDo: sort initially so in date order
     // ToDo: Support sorting date, class, etc.
     return (
       <Paper >
-      <Table >
-        <TableHead>
-          <TableRow>
-            <TableCell style={iconColumnStyle}></TableCell>
-            <TableCell style={smallColumnStyle}>Date</TableCell>
-            <TableCell style={mediumColumnStyle}>Class</TableCell>
-            <TableCell style={largeColumnStyle}>Name</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {this.props.assignments.map(row => {
-            return (
-              <TableRow key={row.id}>
-                <TableCell align="center" style={iconColumnStyle} component="th" scope="row">
- 
-                </TableCell>
-                <TableCell style={smallColumnStyle}>{row.due_date}</TableCell>
-                <TableCell style={mediumColumnStyle}>{row.class.name}</TableCell>
-                <TableCell style={largeColumnStyle}>{row.title}</TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+
+        <Grid container justify='space-between' > 
+          <Typography variant="h4" component="h5">
+            Assignments
+          </Typography>
+          <Button variant="contained" color="primary" 
+                  component={RouterLink} 
+                  to={{pathname: "/assignments/new", state:{ teacherId: this.state.teacherId}}}         
+                  >
+            Add Assignment
+            <AddIcon style={{fontSize: 28 }}/>
+          </Button>                 
+        </Grid>      
+
+        <Table >
+          <TableHead>
+            <TableRow>
+              <TableCell style={iconColumnStyle}></TableCell>
+              <TableCell style={smallColumnStyle}>Date</TableCell>
+              <TableCell style={mediumColumnStyle}>Class</TableCell>
+              <TableCell style={largeColumnStyle}>Name</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {this.props.assignments.map(row => {
+              return (
+                <TableRow key={row.id}>
+                  <TableCell align="center" style={iconColumnStyle} component="th" scope="row">
+                  </TableCell>
+                  <TableCell style={smallColumnStyle}>{row.due_date}</TableCell>
+                  <TableCell style={mediumColumnStyle}>{row.class.name}</TableCell>
+                  <TableCell style={largeColumnStyle}>{row.title}</TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
       </Paper>
     );
   }
@@ -81,9 +86,5 @@ export default
   connect(mapStateToProps,{getAssignments})
   (AssignmentIndex);
 
-/*
-                  <Link component={RouterLink} to={{pathname: `/assignments/${row.id}`, state:{ teacherId: this.state.teacherId }}} >
-                    <AssignmentIcon style={{ fontSize: 32 }}/>
-                  </Link>   
-                  */
+
 
