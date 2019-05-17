@@ -2,12 +2,16 @@ import { combineReducers } from 'redux';
 
 import user from './user';
 import studentAssignment from './studentAssignment';
-import classes from './classes';
+import cls from './cls';
+import assignment from './assignment';
+import student from './student';
 
 const rootReducer = combineReducers({
      user: user,
      studentAssignment: studentAssignment,
-     // classes: classes
+     classes: cls,
+     assignment: assignment,
+     student: student
 });
 
 export default rootReducer

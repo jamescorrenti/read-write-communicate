@@ -13,6 +13,9 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import EditIcon from '@material-ui/icons/Edit';
 
+import { iconColumnStyle, smallColumnStyle, mediumColumnStyle, largeColumnStyle } 
+  from '../styles/tableStyles';
+
 import { getOpenAssignments } from '../actions/studentAssignment';
 
 class StudentAssignmentsOpen extends Component {
@@ -25,31 +28,8 @@ class StudentAssignmentsOpen extends Component {
   }
 
   render() {
-    if (this.props.assignments === null) {
-      return (
-        <Typography component='p'>
-          Retrieving Assignments...
-        </Typography>
-      )
-    }
-
-    const iconColumnStyle = {
-      width: "5%",
-    };
-    const smallColumnStyle = {
-      width: "12%",
-    };
-    const mediumColumnStyle = {
-      wordWrap: "break-word",
-      width: "20%",
-    };
-    const largeColumnStyle = {
-      wordWrap: "break-word",
-      width: "51%",
-    };
     //ToDo: sort initially so in date order
     // ToDo: Support sorting date, class, etc.
-  
     return (
       <Paper >
       <Table >

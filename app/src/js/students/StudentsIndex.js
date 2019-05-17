@@ -6,7 +6,7 @@ const StudentsIndex = (props) => {
   
   return(
     <Typography component="p" >
-        Students Index placeholder
+        Students (for a teacher) Index placeholder
     </Typography>  
   )
 }

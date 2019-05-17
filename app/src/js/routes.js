@@ -7,8 +7,13 @@ import StudentAssignmentView from './studentAssignments/StudentAssignmentView';
 import StudentAssignmentEdit from './studentAssignments/StudentAssignmentEdit';
 
 import AssignmentsIndex from './assignments/AssignmentsIndex';
+
 import StudentsIndex from './students/StudentsIndex';
+
 import ClassesIndex from './classes/ClassesIndex';
+import ClsView from './classes/ClsView';
+import ClsNew from './classes/ClsNew';
+
 import Dashboard from './components/Dashboard';
 import LandingPage from './components/Landingpage';
 
@@ -25,6 +30,8 @@ export default function getRoutes () {
             <Route path="/studentassignments/:id" component={StudentAssignmentView} />
 
             <Route exact path="/classes" component={ClassesIndex} />
+            <Route exact path="/classes/new" component={ClsNew} />       
+            <Route path="/classes/:id" component={ClsView} />
 
             <Route exact path="/assignments" component={AssignmentsIndex} />   
 
