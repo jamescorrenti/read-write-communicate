@@ -11,6 +11,9 @@ import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 
+import { iconColumnStyle, smallColumnStyle, mediumColumnStyle, largeColumnStyle } 
+  from '../styles/tableStyles';
+
 import { getClass } from '../actions/cls';
 
 class ClsView extends Component {
@@ -27,20 +30,7 @@ class ClsView extends Component {
         </Typography>
       </Paper>
     );
-    const iconColumnStyle = {
-        width: "5%",
-      };
-      const smallColumnStyle = {
-        width: "12%",
-      };
-      const mediumColumnStyle = {
-        wordWrap: "break-word",
-        width: "20%",
-      };
-      const largeColumnStyle = {
-        wordWrap: "break-word",
-        width: "51%",
-      };
+
     return (
         <React.Fragment>
             <Paper>

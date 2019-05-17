@@ -12,3 +12,10 @@ export function getAssignments(teacherId) {
     };
 }
 
+export function addAssignment(cls,cb) {
+    return (dispatch) => {
+    
+// Fake code for not using backend 
+       cb();
+    };
+}

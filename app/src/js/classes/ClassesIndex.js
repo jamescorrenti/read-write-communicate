@@ -18,6 +18,9 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 
+import { iconColumnStyle, smallColumnStyle, mediumColumnStyle, largeColumnStyle } 
+  from '../styles/tableStyles';
+
 import { getCurrentClasses } from '../actions/cls';
 
 class ClassesIndex extends Component {
@@ -31,29 +34,7 @@ class ClassesIndex extends Component {
     console.log("Classes Index for teacher",teacherId);
   }
 
-  render () {
-    if (this.props.classes === null) {
-      return (
-        <Typography component='p'>
-          Retrieving Classes...
-        </Typography>
-      )
-    }    
-    const iconColumnStyle = {
-      width: "5%",
-    };
-    const smallColumnStyle = {
-      width: "12%",
-    };
-    const mediumColumnStyle = {
-      wordWrap: "break-word",
-      width: "20%",
-    };
-    const largeColumnStyle = {
-      wordWrap: "break-word",
-      width: "51%",
-    };
-      
+  render () {   
     return (
       <Paper >
 
