@@ -1,69 +1,53 @@
-from flask import jsonify, request, g, url_for, current_app
+from flask import jsonify, request, g, url_for, current_app, abort
 from .. import db
-from ..models import Permission, Assignment, Question
-from . import api
+from flask_restful import Resource
+from ..models import Permission, Assignment, Question, QuestionSchema
 from .decorators import permission_required
 
-
-#@api.route('/question/')
-def get_questions():
-    page = request.args.get('page', 1, type=int)
-    pagination = Question.query.order_by(Question.timestamp.desc()).paginate(
-        page, per_page=current_app.config['RWC_QUESTION_PER_PAGE'],
-        error_out=False)
-    questions = pagination.items
-    prev = None
-    if pagination.has_prev:
-        prev = url_for('api.get_question', page=page-1)
-    next = None
-    if pagination.has_next:
-        next = url_for('api.get_question', page=page+1)
-    return jsonify({
-        'questions': [question.to_json() for question in questions],
-        'prev': prev,
-        'next': next,
-        'count': pagination.total
-    })
+question_schema = QuestionSchema()
 
 
-#@api.route('/question/<int:id>')
-def get_question(id):
-    question = Question.query.get_or_404(id)
-    return jsonify(question.to_json())
+class QuestionResource(Resource):
+    def get(self, id):
+        question = Question.query.get_or_404(id)
+        return question_schema.jsonify(question)
 
+    # returns 1 if deleted, returns 0 if failed (did ID exist?)
+    def delete(self, id):
+        question = Question.query.filter_by(id=id).delete()
+        db.session.commit()
+        return jsonify(question)
 
-#@api.route('/assignment/<int:id>/questions/')
-def get_assignment_questions(id):
-    assignment = Assignment.query.get_or_404(id)
-    page = request.args.get('page', 1, type=int)
-    pagination = Assignment.questions.order_by(assignment.timestamp.asc()).paginate(
-        page, per_page=current_app.config['RWC_QUESTION_PER_PAGE'],
-        error_out=False)
-    questions = pagination.items
-    prev = None
-    if pagination.has_prev:
-        prev = url_for('api.get_assignment_questions', id=id, page=page-1)
-    next = None
-    if pagination.has_next:
-        next = url_for('api.get_assignment_questions', id=id, page=page+1)
-    return jsonify({
-        'questions': [question.to_json() for question in questions],
-        'prev': prev,
-        'next': next,
-        'count': pagination.total
-    })
+    # create an question TODO: figure out how not to use id to create an assignment
+    def post(self, id):
+        json_data = request.get_json()
+        if not json_data:
+            abort("404")
+        try:
+            data, errors = question_schema.load(json_data)
+            if errors:
+                return jsonify(errors)
+            db.session.add(data)
+            db.session.commit()
+            return question_schema.jsonify(data)
+        except Exception as e:
+            return {"message": e._message(), "status": 400}, 400
 
-"""
-# TODO: this  needs a look
-@api.route('/assignment/<int:id>/questions/', methods=['POST'])
-@permission_required(Permission.WRITE)
-def new_assignment_answer(id):
-    assignment = Assignment.query.get_or_404(id)
-    question = Questions.from_json(request.json)
-    student = g.current_user
-    question.assignment = assignment
-    answer.
-    db.session.add(answer)
-    db.session.commit()
-    return jsonify(question.to_json()), 201, 
-"""
+    # update question
+    # TODO: this will need some work...
+    def put(self, id):
+        question = Question.query.get_or_404(id)
+        json_data = request.get_json()
+        if not json_data:
+            abort("404")
+        try:
+            data, errors = question_schema.load(json_data)
+            if errors:
+                return jsonify(errors)
+            question = data
+            question.id = id
+            db.session.add(question)
+            db.session.commit()
+            return question_schema.jsonify(data)
+        except Exception as e:
+            return {"message": e._message(), "status": 400}, 400
