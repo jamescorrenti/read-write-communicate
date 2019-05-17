@@ -198,39 +198,32 @@ class User(UserMixin, db.Model):
         self.last_seen = datetime.utcnow()
         db.session.add(self)
 
-    def gravatar_hash(self):
+    def get_avatar_hash(self):
         return hashlib.md5(self.email.lower().encode('utf-8')).hexdigest()
 
-    def gravatar(self, size=100, default='identicon', rating='g'):
+    def avatar(self, size=100, default='identicon', rating='g'):
         url = 'https://secure.gravatar.com/avatar'
-        hash = self.avatar_hash or self.gravatar_hash()
+        hash = self.avatar_hash or self.get_avatar_hash()
         return '{url}/{hash}?s={size}&d={default}&r={rating}'.format(
             url=url, hash=hash, size=size, default=default, rating=rating)
 
-    def to_json(self):
-        json_user = {
-            'url': url_for('api.get_user', id=self.id),
-            'username': self.username,
-            'assignment_count': self.assignments.count()
-        }
-        return json_user
-
-    def generate_auth_token(self, expiration):
-        s = Serializer(current_app.config['SECRET_KEY'],
-                       expires_in=expiration)
-        return s.dumps({'id': self.id}).decode('utf-8')
-
-    @staticmethod
-    def verify_auth_token(token):
-        s = Serializer(current_app.config['SECRET_KEY'])
-        try:
-            data = s.loads(token)
-        except:
-            return None
-        return User.query.get(data['id'])
-
     def __repr__(self):
         return '<User %r>' % self.username
+
+
+class RevokedTokenModel(db.Model):
+    __tablename__ = 'revoked_tokens'
+    id = db.Column(db.Integer, primary_key=True)
+    jti = db.Column(db.String(120))
+
+    def add(self):
+        db.session.add(self)
+        db.session.commit()
+
+    @classmethod
+    def is_jti_blacklisted(cls, jti):
+        query = cls.query.filter_by(jti=jti).first()
+        return bool(query)
 
 
 class Faculty(User):
