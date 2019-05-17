@@ -34,4 +34,5 @@ Werkzeug==0.12.2
 WTForms==2.1
 Pyphen==0.9.5
 repoze.lru==0.7
+flask-jwt-extended==3.18.2
 textstat==0.5.4

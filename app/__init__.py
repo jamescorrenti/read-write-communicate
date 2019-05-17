@@ -7,6 +7,7 @@ from flask_login import LoginManager
 from flask_pagedown import PageDown
 from flask_marshmallow import Marshmallow
 from config import config
+from flask_jwt_extended import JWTManager
 
 bootstrap = Bootstrap()
 mail = Mail()
@@ -14,6 +15,7 @@ moment = Moment()
 db = SQLAlchemy()
 ma = Marshmallow()
 pagedown = PageDown()
+jwt = JWTManager()
 
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
@@ -29,8 +31,15 @@ def create_app(config_name):
     moment.init_app(app)
     db.init_app(app)
     ma.init_app(app)
+    jwt.init_app(app)
     login_manager.init_app(app)
     pagedown.init_app(app)
+
+    @jwt.token_in_blacklist_loader
+    def check_if_token_in_blacklist(decrypted_token):
+        jti = decrypted_token['jti']
+        from .models import RevokedTokenModel
+        return RevokedTokenModel.is_jti_blacklisted(jti)
 
     if app.config['SSL_REDIRECT']:
         from flask_sslify import SSLify
@@ -44,4 +53,5 @@ def create_app(config_name):
 
     from .api import api_bp
     app.register_blueprint(api_bp, url_prefix='/api/v1')
+
     return app
