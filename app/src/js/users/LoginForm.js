@@ -28,7 +28,7 @@ function LoginForm (props) {
         <DialogContent>
           <TextField autoFocus required
               variant="outlined" margin="normal" fullWidth
-              id="email" label="Email" type="text" 
+              id="username" label="Username" type="text" 
               onChange={e => onChange(e)}
           />
           <TextField required
