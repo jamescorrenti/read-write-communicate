@@ -7,6 +7,8 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
    
+import { cancelButtonStyle, secondaryButtonStyle } from '../styles/buttonStyles';
+
 class AssignmentWork extends Component { 
 
     state = {
@@ -35,6 +37,7 @@ class AssignmentWork extends Component {
             marginTop: "1em",
             padding: "1em"
         }
+
         const toolbarConfig = {
             // Optionally specify the groups to display (displayed in the order listed).
             display: ['INLINE_STYLE_BUTTONS', 'BLOCK_TYPE_BUTTONS', 'BLOCK_TYPE_DROPDOWN', 'HISTORY_BUTTONS'],
@@ -54,10 +57,11 @@ class AssignmentWork extends Component {
               {label: 'OL', style: 'ordered-list-item'}
             ]
           };   
-          const accentColor = {
-              backgroundColor: '#DF7214'
-          } 
 
+        const buttonGrid = {
+            marginTop: '0.5em',
+        }
+ 
         return (
             <Paper style={customPaperStyle}>
                 <Typography variant="h6" component="h6" gutterBottom >
@@ -70,8 +74,12 @@ class AssignmentWork extends Component {
                     onChange={this.onChange}
                     editorStyle={{minHeight: '10em'}}
                 />
-                <Grid container justify='flex-end' spacing={16} >
-                    <Button variant="contained" color="default" 
+                <Grid container justify='flex-end' spacing={16} style={buttonGrid}>
+                    <Button variant="contained" style={cancelButtonStyle} 
+                            onClick={this.props.cancel}>
+                        Cancel
+                    </Button>               
+                    <Button variant="contained" style={secondaryButtonStyle}
                             onClick={this.onSave} disabled={!this.state.changesSinceSave}>
                         Save Draft
                     </Button>
@@ -79,10 +87,7 @@ class AssignmentWork extends Component {
                             onClick={this.onSubmit}>
                         Submit
                     </Button>
-                    <Button variant="contained" style={accentColor} 
-                            onClick={this.props.cancel}>
-                        Cancel
-                    </Button>
+
                 </Grid>
             </Paper>
         )

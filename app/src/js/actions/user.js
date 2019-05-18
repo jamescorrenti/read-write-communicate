@@ -23,9 +23,11 @@ console.log('login user request body',JSON.stringify(request))
                 localStorage.setItem('refresh_token', res.refresh_token);                  
                 console.log('login response',res)                
                 dispatch({ type:'LOGIN_USER', 
-                        accessToken: res.access_token, 
-                        // following hardcoded temporarily
-                        id: 1, screenName: 'JoeStudent', role:'student' });
+                        accessToken: res.access_token,
+                        id: res.id,
+                        role: res.type,
+                        avatar: res.avatar,
+                        screenName: res.username});
                 callback();
             })
             .catch(function(error) {

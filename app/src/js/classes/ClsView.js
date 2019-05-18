@@ -11,8 +11,7 @@ import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 
-import { iconColumnStyle, smallColumnStyle, mediumColumnStyle, largeColumnStyle } 
-  from '../styles/tableStyles';
+import * as TableStyles from '../styles/tableStyles';
 
 import { getClass } from '../actions/cls';
 
@@ -42,14 +41,14 @@ class ClsView extends Component {
             <Table >
                 <TableHead>
                     <TableRow>
-                        <TableCell style={largeColumnStyle}>Student</TableCell>
+                        <TableCell style={TableStyles.largeColumn}>Student</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
                 {this.props.cls.roster.map(row => {
                     return (
                         <TableRow key={row.id}>
-                            <TableCell style={largeColumnStyle} component="th" scope="row">
+                            <TableCell style={TableStyles.largeColumn} component="th" scope="row">
                                 <Link component={RouterLink} to={{pathname: `/studentassignments`, state:{ studentId: row.id }}} >
                                     {row.name}
                                 </Link>    

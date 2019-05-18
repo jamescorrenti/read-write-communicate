@@ -16,8 +16,7 @@ import Button from '@material-ui/core/Button';
 
 import AddIcon from '@material-ui/icons/Add';
 
-import { iconColumnStyle, smallColumnStyle, mediumColumnStyle, largeColumnStyle } 
-  from '../styles/tableStyles';
+import * as TableStyles from '../styles/tableStyles';
 
 import { getAssignments } from '../actions/assignment';
 
@@ -31,10 +30,14 @@ class AssignmentIndex extends Component {
   }
 
   render() {
+    const customPaperStyle = {
+      marginTop: "1em",
+      padding: "1em"
+  }
     //ToDo: sort initially so in date order
     // ToDo: Support sorting date, class, etc.
     return (
-      <Paper >
+      <Paper style={customPaperStyle}>
 
         <Grid container justify='space-between' > 
           <Typography variant="h4" component="h5">
@@ -45,28 +48,28 @@ class AssignmentIndex extends Component {
                   to={{pathname: "/assignments/new", state:{ teacherId: this.state.teacherId}}}         
                   >
             Add Assignment
-            <AddIcon style={{fontSize: 28 }}/>
+            <AddIcon style={TableStyles.actionIcon }/>
           </Button>                 
         </Grid>      
 
         <Table >
           <TableHead>
             <TableRow>
-              <TableCell style={iconColumnStyle}></TableCell>
-              <TableCell style={smallColumnStyle}>Date</TableCell>
-              <TableCell style={mediumColumnStyle}>Class</TableCell>
-              <TableCell style={largeColumnStyle}>Name</TableCell>
+              <TableCell style={TableStyles.iconColumn}></TableCell>
+              <TableCell style={TableStyles.smallColumn}>Date</TableCell>
+              <TableCell style={TableStyles.mediumColumn}>Class</TableCell>
+              <TableCell style={TableStyles.largeColumn}>Name</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {this.props.assignments.map(row => {
               return (
                 <TableRow key={row.id}>
-                  <TableCell align="center" style={iconColumnStyle} component="th" scope="row">
+                  <TableCell align="center" style={TableStyles.iconColumn} component="th" scope="row">
                   </TableCell>
-                  <TableCell style={smallColumnStyle}>{row.due_date}</TableCell>
-                  <TableCell style={mediumColumnStyle}>{row.class.name}</TableCell>
-                  <TableCell style={largeColumnStyle}>{row.title}</TableCell>
+                  <TableCell style={TableStyles.smallColumn}>{row.due_date}</TableCell>
+                  <TableCell style={TableStyles.mediumColumn}>{row.class.name}</TableCell>
+                  <TableCell style={TableStyles.largeColumn}>{row.title}</TableCell>
                 </TableRow>
               );
             })}

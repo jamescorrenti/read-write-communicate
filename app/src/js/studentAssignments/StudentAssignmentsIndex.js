@@ -12,8 +12,7 @@ import Paper from '@material-ui/core/Paper';
 import Link from '@material-ui/core/Link';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 
-import { iconColumnStyle, smallColumnStyle, mediumColumnStyle, largeColumnStyle}
-  from '../styles/tableStyles';
+import * as TableStyles from '../styles/tableStyles';
 
 import { getSubmittedAssignments } from '../actions/studentAssignment';
 
@@ -34,25 +33,25 @@ class StudentAssignmentIndex extends Component {
       <Table >
         <TableHead>
           <TableRow>
-            <TableCell style={iconColumnStyle}></TableCell>
-            <TableCell style={smallColumnStyle}>Date</TableCell>
-            <TableCell style={mediumColumnStyle}>Class</TableCell>
-            <TableCell style={largeColumnStyle}>Name</TableCell>
+            <TableCell style={TableStyles.iconColumn}></TableCell>
+            <TableCell style={TableStyles.smallColumn}>Date</TableCell>
+            <TableCell style={TableStyles.mediumColumn}>Class</TableCell>
+            <TableCell style={TableStyles.largeColumn}>Name</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {this.props.assignments.map(row => {
             return (
               <TableRow key={row.id}>
-                <TableCell align="center" style={iconColumnStyle} component="th" scope="row">
+                <TableCell align="center" style={TableStyles.iconColumn} component="th" scope="row">
                   <Link component={RouterLink} 
                         to={{pathname: `/studentassignments/${row.id}`, state:{ studentId: this.state.studentId }}} >
-                    <AssignmentIcon style={{ fontSize: 32 }}/>
+                    <AssignmentIcon style={TableStyles.actionIcon}/>
                   </Link>    
                 </TableCell>
-                <TableCell style={smallColumnStyle}>{row.submit_date}</TableCell>
-                <TableCell style={mediumColumnStyle}>{row.class.name}</TableCell>
-                <TableCell style={largeColumnStyle}>{row.name}</TableCell>
+                <TableCell style={TableStyles.smallColumn}>{row.submit_date}</TableCell>
+                <TableCell style={TableStyles.mediumColumn}>{row.class.name}</TableCell>
+                <TableCell style={TableStyles.largeColumn}>{row.name}</TableCell>
               </TableRow>
             );
           })}

@@ -9,12 +9,10 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import EditIcon from '@material-ui/icons/Edit';
 
-import { iconColumnStyle, smallColumnStyle, mediumColumnStyle, largeColumnStyle } 
-  from '../styles/tableStyles';
+import * as TableStyles from '../styles/tableStyles';
 
 import { getOpenAssignments } from '../actions/studentAssignment';
 
@@ -35,26 +33,26 @@ class StudentAssignmentsOpen extends Component {
       <Table >
         <TableHead>
           <TableRow>
-            <TableCell style={iconColumnStyle} ></TableCell>
-            <TableCell style={smallColumnStyle}>Date</TableCell>
-            <TableCell style={smallColumnStyle}>Status</TableCell>
-            <TableCell style={mediumColumnStyle}>Class</TableCell>
-            <TableCell style={largeColumnStyle}>Title</TableCell>
+            <TableCell style={TableStyles.iconColumn} ></TableCell>
+            <TableCell style={TableStyles.smallColumn}>Date</TableCell>
+            <TableCell style={TableStyles.smallColumn}>Status</TableCell>
+            <TableCell style={TableStyles.mediumColumn}>Class</TableCell>
+            <TableCell style={TableStyles.largeColumn}>Title</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {this.props.assignments.map(row => {
             return (
               <TableRow key={row.id}>
-                <TableCell align="center" style={iconColumnStyle} component="th" scope="row">
+                <TableCell align="center" style={TableStyles.iconColumn} component="th" scope="row">
                 <Link component={RouterLink} to={{pathname: `/studentassignments/${row.id}/edit`, state:{ studentId: this.state.studentId }}} >
-                    <EditIcon style={{ fontSize: 32 }}/>
+                    <EditIcon style={TableStyles.actionIcon}/>
                   </Link>    
                 </TableCell>
-                <TableCell style={smallColumnStyle}>{row.due_date}</TableCell>
-                <TableCell style={smallColumnStyle}>{row.status}</TableCell>
-                <TableCell style={mediumColumnStyle}>{row.class.name}</TableCell>
-                <TableCell style={largeColumnStyle}>{row.title}</TableCell>
+                <TableCell style={TableStyles.smallColumn}>{row.due_date}</TableCell>
+                <TableCell style={TableStyles.smallColumn}>{row.status}</TableCell>
+                <TableCell style={TableStyles.mediumColumn}>{row.class.name}</TableCell>
+                <TableCell style={TableStyles.largeColumn}>{row.title}</TableCell>
               </TableRow>
             );
           })}

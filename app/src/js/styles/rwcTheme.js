@@ -41,6 +41,9 @@ export const rwcTheme = createMuiTheme({
       contained: {
         backgroundColor: colors.primary,
         color: colors.textContrast
+      },
+      root: {
+        margin: '5px',     
       }
     },
     MuiDialogTitle: { // Signin Dialog
