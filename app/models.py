@@ -6,7 +6,7 @@ from markdown import markdown
 import bleach
 from flask import current_app, request, url_for
 from flask_login import UserMixin, AnonymousUserMixin
-from app.exceptions import ValidationError
+# from app.exceptions import ValidationError
 from . import db, ma, login_manager
 from marshmallow import fields, ValidationError
 
@@ -97,8 +97,8 @@ class School(db.Model):
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(64), unique=True, index=True)
-    username = db.Column(db.String(64), unique=True, index=True)
+    email = db.Column(db.String(64), unique=True, index=True, nullable=False)
+    username = db.Column(db.String(64), unique=True, index=True, nullable=False)
     # role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     password_hash = db.Column(db.String(128))
     confirmed = db.Column(db.Boolean, default=False)
@@ -106,7 +106,6 @@ class User(UserMixin, db.Model):
     # location = db.Column(db.String(64))
     avatar_hash = db.Column(db.String(32))
     schools = db.relationship("SchoolUser", back_populates="user")
-
     type = db.Column(db.String(50))
 
     __mapper_args__ = {
@@ -117,7 +116,7 @@ class User(UserMixin, db.Model):
     def __init__(self, **kwargs):
         super(User, self).__init__(**kwargs)
         if self.email is not None and self.avatar_hash is None:
-            self.avatar_hash = self.gravatar_hash()
+            self.avatar_hash = self.get_avatar_hash()
 
     @property
     def password(self):
@@ -129,26 +128,6 @@ class User(UserMixin, db.Model):
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
-
-    def generate_confirmation_token(self, expiration=3600):
-        s = Serializer(current_app.config['SECRET_KEY'], expiration)
-        return s.dumps({'confirm': self.id}).decode('utf-8')
-
-    def confirm(self, token):
-        s = Serializer(current_app.config['SECRET_KEY'])
-        try:
-            data = s.loads(token.encode('utf-8'))
-        except:
-            return False
-        if data.get('confirm') != self.id:
-            return False
-        self.confirmed = True
-        db.session.add(self)
-        return True
-
-    def generate_reset_token(self, expiration=3600):
-        s = Serializer(current_app.config['SECRET_KEY'], expiration)
-        return s.dumps({'reset': self.id}).decode('utf-8')
 
     @staticmethod
     def reset_password(token, new_password):
@@ -282,6 +261,7 @@ class Class(db.Model):
     # year = db.Column(db.Integer)
     # semester = db.Column(db.Integer)
 
+
 class AnonymousUser(AnonymousUserMixin):
     def can(self, permissions):
         return False
@@ -335,11 +315,6 @@ class Question(db.Model):
         return Question(body=body)
 
 
-def requirement(data):
-    if not data:
-        raise ValidationError('Data not provided')
-
-
 class QuestionSchema(ma.ModelSchema):
     class Meta:
         model = Question
@@ -348,6 +323,7 @@ class QuestionSchema(ma.ModelSchema):
 class UserSchema(ma.ModelSchema):
     class Meta:
         model = User
+        model_fields_kwargs = {'password_hash': {'load_only': True}}
 
 
 class SchoolUserSchema(ma.ModelSchema):

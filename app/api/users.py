@@ -10,7 +10,8 @@ from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_r
                                 jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 
 parser = reqparse.RequestParser()
-parser.add_argument('username', help='This field cannot be blank', required=True)
+parser.add_argument('username')
+parser.add_argument('email')
 parser.add_argument('password', help='This field cannot be blank', required=True)
 
 users_schema = UserSchema(many=True)
@@ -22,19 +23,21 @@ class UserRegistration(Resource):
         data = parser.parse_args()
         try:
             user, errors = user_schema.load(data)
-            user.password = data['password']
             if errors:
                 return jsonify(errors)
+            user.password = data['password']
             db.session.add(user)
             db.session.commit()
             access_token = create_access_token(identity=user.username)
             refresh_token = create_refresh_token(identity=user.username)
             return {
-                'message': 'User {} was created'.format(data['username']),
+                'id': user.id,
+                'type': user.type,
+                'avatar': user.avatar(),
+                'username': user.username,
                 'access_token': access_token,
                 'refresh_token': refresh_token
             }
-            # return user_schema.jsonify(user1)
         except Exception as e:
             return {"message": e._message(), "status": 400}, 400
 
@@ -42,7 +45,8 @@ class UserRegistration(Resource):
 class UserLogin(Resource):
     def post(self):
         data = parser.parse_args()
-        print(data)
+        if not data['username'] and not data['email']:
+            return {'message': 'Username or email is required'}
         current_user = User.query.filter_by(username=data['username']).first_or_404()
 
         if not current_user:
@@ -52,10 +56,14 @@ class UserLogin(Resource):
             access_token = create_access_token(identity=data['username'])
             refresh_token = create_refresh_token(identity=data['username'])
             return {
-                'message': 'Logged in as {}'.format(current_user.username),
+                'id': current_user.id,
+                'type': current_user.type,
+                'avatar': current_user.avatar(),
+                'username': current_user.username,
                 'access_token': access_token,
                 'refresh_token': refresh_token
             }
+        # TODO: what happens if invalid password?
 
 
 class UserLogoutAccess(Resource):
