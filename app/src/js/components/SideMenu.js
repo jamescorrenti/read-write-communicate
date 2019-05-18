@@ -10,7 +10,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 
-const drawerWidth = 225;
+const drawerWidth = 220;
 
 const styles = theme => ({
     drawer: { 
@@ -19,7 +19,8 @@ const styles = theme => ({
     },
     drawerPaper: {
       backgroundColor: '#0D8087',
-      color: '#FFFFFF'
+      color: '#FFFFFF',
+      width: drawerWidth,       
     },
     whiteColor: {
       color: '#FFFFFF',

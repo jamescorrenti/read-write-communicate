@@ -1,5 +1,6 @@
 import { handleAPIErrors } from './handleAPIErrors';
 
+const API_VERSION='/api/v1'
 export function loginUser(credentials,successCallback,errorCallback) {
     return (dispatch) => {
        const request = {'username': credentials.username, 'password': credentials.password};
@@ -11,7 +12,7 @@ export function loginUser(credentials,successCallback,errorCallback) {
             }
         };
         let auth;
-        fetch('/api/v1/login', options)
+        fetch(`${API_VERSION}/login`, options)
             .then(res => handleAPIErrors(res))        
             .then(res => {   
                 return res.json()            
@@ -36,27 +37,28 @@ export function loginUser(credentials,successCallback,errorCallback) {
 
 export function logoutUser(callback) {
     return (dispatch) => {
-        // const token = localStorage.getItem("token");
-        // const options = {
-        //     method: 'DELETE',
-        //     headers: new Headers({
-        //         'Authorization': `${token}`, 
-        //         'Content-Type': 'application/json'
-        //     })
-        // };           
-        // fetch("/logout", options)
-        //     .then(res => handleAPIErrors(res))         
-        //     .then(res => {
-        //         localStorage.removeItem('token');
-        //         dispatch({type: "LOGOUT_USER"});
-        //         callback();
-        // }).catch(function(error) {
-        //     console.log(error);     
-        // })  
-        // fake code for no backend
-        localStorage.removeItem('token'); 
-        dispatch({type: "LOGOUT_USER"}); 
-        callback();    
+        const token = localStorage.getItem('access_token');
+        const options = {
+            method: 'POST',
+            headers: new Headers({
+                'Authorization': `Bearer ${token}`,  
+                'Content-Type': 'application/json'
+            })
+        };           
+        fetch(`${API_VERSION}/logout/access`, options)
+            .then(res => handleAPIErrors(res))         
+            .then(res => {
+                localStorage.removeItem('access_token');
+                dispatch({type: 'LOGOUT_USER'});
+                callback();
+        }).catch(function(error) {
+            console.log(error);     
+        })  
+        //TODO: Logout refresh token
+        // // fake code for no backend
+        // localStorage.removeItem('token'); 
+        // dispatch({type: "LOGOUT_USER"}); 
+        // callback();    
     }
 }    
 
