@@ -9,7 +9,7 @@ import LoginForm from './LoginForm';
 class LoginFormContainer extends React.Component {
   state = {
     open: false,
-    email: '',
+    username: '',
     password: ''
   };
 
@@ -17,14 +17,14 @@ class LoginFormContainer extends React.Component {
 
   handleClose = () => {
     this.setState({ open: false });
-    this.setState({ open: false, email: '', password: '' });
+    this.setState({ open: false, username: '', password: '' });
   };
 
   handleLogin = () => {
     this.props.loginUser(this.state, () => {
       this.props.history.push(`/dashboard`)        
     });                 
-    this.setState({ open: false, email: '', password: '' });
+    this.setState({ open: false, username: '', password: '' });
   };
 
   onChange = (e) => {

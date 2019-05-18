@@ -13,7 +13,7 @@ export default function (
     switch (action.type) { 
         case "LOGIN_USER":
             return {...state, errorMessage: '', 
-                authenticated: action.token, id: action.id, screenName: action.name, role: action.role}
+                authenticated: action.accessToken, id: action.id, screenName: action.screenName, role: action.role}
         case "LOGOUT_USER":
                 return {...state, errorMessage: '', 
                     authenticated: '', id: 0, screenName: '', type: ''}

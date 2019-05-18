@@ -2,36 +2,35 @@ import { handleAPIErrors } from './handleAPIErrors';
 
 export function loginUser(credentials,callback) {
     return (dispatch) => {
-//        const request = {"user": {"email": credentials.email, "password": credentials.password}}
-// console.log("login user request body",JSON.stringify(request))
-//        const options = {
-//             method: 'POST',
-//             body: JSON.stringify(request),
-//             headers: {
-//               'Content-Type': 'application/json'
-//             }
-//         };
-//         let auth;
-//         fetch("/login", options)
-//             .then(res => handleAPIErrors(res))        
-//             .then(res => {
-//                 auth = res.headers.get('authorization');          
-//                 return res.json()            
-//             })
-//             .then (res =>{
-//                 localStorage.setItem("token", auth);                   
-//                 dispatch({type:"LOGIN_USER", token:auth, id: res.id, screenName: res.screen_name });
-//                 callback();
-//             })
-//             .catch(function(error) {
-//                 console.log("Login Error",error);
-//             });    
-// Fake code for not using backend for login
-        localStorage.setItem("token","rwc-test") 
-        // dispatch({type:"LOGIN_USER", token:"rwc-test", role:'student', id: 99, name: "Joe" });
-        // callback(); 
-        dispatch({type:"LOGIN_USER", token:"rwc-test", role:'teacher', id: 65, name: "Kumu" });
-        callback();                 
+       const request = {'username': credentials.username, 'password': credentials.password};
+console.log('login user request body',JSON.stringify(request))
+       const options = {
+            method: 'POST',
+            body: JSON.stringify(request),
+            headers: {
+              'Content-Type': 'application/json'
+            }
+        };
+        let auth;
+        fetch('/api/v1/login', options)
+            .then(res => handleAPIErrors(res))        
+            .then(res => {
+              //  auth = res.headers.get('authorization');          
+                return res.json()            
+            })
+            .then (res =>{
+                localStorage.setItem('access_token', res.access_token);  
+                localStorage.setItem('refresh_token', res.refresh_token);                  
+                console.log('login response',res)                
+                dispatch({ type:'LOGIN_USER', 
+                        accessToken: res.access_token, 
+                        // following hardcoded temporarily
+                        id: 1, screenName: 'JoeStudent', role:'student' });
+                callback();
+            })
+            .catch(function(error) {
+                console.log('Login Error',error);
+            });               
     };
 }
 
