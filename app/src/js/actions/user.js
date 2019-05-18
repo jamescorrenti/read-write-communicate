@@ -1,9 +1,8 @@
 import { handleAPIErrors } from './handleAPIErrors';
 
-export function loginUser(credentials,callback) {
+export function loginUser(credentials,successCallback,errorCallback) {
     return (dispatch) => {
        const request = {'username': credentials.username, 'password': credentials.password};
-console.log('login user request body',JSON.stringify(request))
        const options = {
             method: 'POST',
             body: JSON.stringify(request),
@@ -14,24 +13,23 @@ console.log('login user request body',JSON.stringify(request))
         let auth;
         fetch('/api/v1/login', options)
             .then(res => handleAPIErrors(res))        
-            .then(res => {
-              //  auth = res.headers.get('authorization');          
+            .then(res => {   
                 return res.json()            
             })
             .then (res =>{
+                // ToDo: if already logged in, seems that we get 200 with no token?
                 localStorage.setItem('access_token', res.access_token);  
-                localStorage.setItem('refresh_token', res.refresh_token);                  
-                console.log('login response',res)                
+                localStorage.setItem('refresh_token', res.refresh_token);                             
                 dispatch({ type:'LOGIN_USER', 
                         accessToken: res.access_token,
                         id: res.id,
                         role: res.type,
                         avatar: res.avatar,
                         screenName: res.username});
-                callback();
+                successCallback();
             })
             .catch(function(error) {
-                console.log('Login Error',error);
+                errorCallback(`Login Error: ${error}`);
             });               
     };
 }

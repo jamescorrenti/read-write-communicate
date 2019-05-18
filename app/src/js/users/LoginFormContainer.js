@@ -10,7 +10,8 @@ class LoginFormContainer extends React.Component {
   state = {
     open: false,
     username: '',
-    password: ''
+    password: '',
+    errorMessage: ''
   };
 
   handleClickOpen = () => { this.setState({ open: true }); };
@@ -20,15 +21,18 @@ class LoginFormContainer extends React.Component {
     this.setState({ open: false, username: '', password: '' });
   };
 
-  handleLogin = () => {
-    this.props.loginUser(this.state, () => {
-      this.props.history.push(`/dashboard`)        
-    });                 
+  handleLogin = (e) => {
+    e.preventDefault();
+    this.props.loginUser(
+        this.state, 
+        () => {    this.props.history.push(`/dashboard`)},
+        (message) => { this.setState({errorMessage: message}); this.handleClickOpen()}        
+    );                 
     this.setState({ open: false, username: '', password: '' });
   };
 
   onChange = (e) => {
-    this.setState({ [e.target.id] : e.target.value })
+    this.setState({ [e.target.id] : e.target.value, errorMessage: '' })
   }
   
   render() {
@@ -38,7 +42,8 @@ class LoginFormContainer extends React.Component {
           handleOpen={this.handleClickOpen} 
           handleClose={this.handleClose}
           handleLogin={this.handleLogin}
-          onChange={this.onChange} />
+          onChange={this.onChange} 
+          errorMessage={this.state.errorMessage} />
     );
   }
 }
