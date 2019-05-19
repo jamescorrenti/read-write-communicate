@@ -57,36 +57,5 @@ function LoginForm (props) {
 }
 
 export default LoginForm;
-/*
-  <div>
-      <Button variant="contained" onClick={handleOpen}>
-        Sign In
-      </Button>
-      <Dialog open={open} onClose={handleClose} 
-              aria-labelledby="form-dialog-title" >
-        <DialogTitle id="form-dialog-title">
-          <img src={logo} alt="Logo" style={{padding:"10"}} />
-        </DialogTitle>
-        <DialogContent>
-          <TextField autoFocus required
-              variant="outlined" margin="normal" fullWidth
-              id="username" label="Username" type="text" 
-              onChange={e => onChange(e)}
-          />
-          <TextField required
-              variant="outlined" margin="normal" fullWidth
-              id="password" label="Password" type="password" 
-              onChange={e => onChange(e)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button variant="contained" onClick={handleClose} style={cancelButtonStyle}>
-            Cancel
-          </Button>
-          <Button variant="contained" onClick={handleLogin} >
-            Sign In
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-*/
+
+

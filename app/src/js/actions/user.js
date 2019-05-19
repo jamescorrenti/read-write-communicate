@@ -22,11 +22,14 @@ export function loginUser(credentials,successCallback,errorCallback) {
                 localStorage.setItem('access_token', res.access_token);  
                 localStorage.setItem('refresh_token', res.refresh_token);                             
                 dispatch({ type:'LOGIN_USER', 
-                        accessToken: res.access_token,
+                        authenticated: res.access_token,
                         id: res.id,
                         role: res.type,
                         avatar: res.avatar,
-                        screenName: res.username});
+                        username: res.username,
+                        email:'xxx@domain', 
+                        name: 'deuce'             
+                    });
                 successCallback();
             })
             .catch(function(error) {
@@ -61,4 +64,4 @@ export function logoutUser(callback) {
         // callback();    
     }
 }    
-
+ 

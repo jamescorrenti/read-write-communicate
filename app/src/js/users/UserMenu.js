@@ -10,6 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import PersonIcon from '@material-ui/icons/Person';
 
+import EditProfileDialog from '../users/EditProfileDialog';
 import { logoutUser } from '../actions/user';
 import { colors } from '../styles/colors';
 
@@ -31,6 +32,11 @@ class UserMenu extends React.Component {
     this.setState({ anchorEl: null });
   };
 
+  handleEditProfile = () => {
+    this.props.logoutUser(() => { this.props.history.push('/') });    
+    this.setState({ anchorEl: null });
+  };
+
   render() {
     const iconWhite = {
       fill: colors.textContrast,
@@ -46,6 +52,7 @@ class UserMenu extends React.Component {
           <ArrowDropDownIcon style={iconWhite}/> 
         </Fab>
         <Menu id="user-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={this.handleClose} >
+          <EditProfileDialog onDone={this.handleClose} />
           <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
         </Menu>
       </div>
@@ -55,7 +62,7 @@ class UserMenu extends React.Component {
 
 const mapStateToProps = state => {
   return {
-      name: state.user.screenName,
+      name: state.user.username,  // ToDo: should be name
   }
 }    
 
