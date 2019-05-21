@@ -11,10 +11,10 @@ import App from './components/App';
 
 const store = createStore(
     rootReducer,
-    // {   //initial state
-    //     user: { authenticated: localStorage.getItem('token')}
-    // },   
-    {},   
+    {   //initial state --- ToDo: cannot just rely on the token, need to keep the id somewhere too...
+        // user: { authenticated: localStorage.getItem('access_token')}
+    },   
+    // {},   
     applyMiddleware(reduxThunk)
 );
 

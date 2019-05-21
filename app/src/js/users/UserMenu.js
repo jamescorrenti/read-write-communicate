@@ -10,6 +10,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import PersonIcon from '@material-ui/icons/Person';
 
+import EditProfileContainer from '../users/EditProfileContainer';
+import ChangePasswordContainer from '../users/ChangePasswordContainer';
 import { logoutUser } from '../actions/user';
 import { colors } from '../styles/colors';
 
@@ -27,7 +29,7 @@ class UserMenu extends React.Component {
   };
 
   handleLogout = () => {
-    this.props.logoutUser(() => { this.props.history.push('/') });    
+    this.props.logoutUser(this.props.id, () => { this.props.history.push('/') });    
     this.setState({ anchorEl: null });
   };
 
@@ -46,6 +48,8 @@ class UserMenu extends React.Component {
           <ArrowDropDownIcon style={iconWhite}/> 
         </Fab>
         <Menu id="user-menu" anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={this.handleClose} >
+          <EditProfileContainer onDone={this.handleClose} />
+          <ChangePasswordContainer onDone={this.handleClose} />
           <MenuItem onClick={this.handleLogout}>Logout</MenuItem>
         </Menu>
       </div>
@@ -55,7 +59,8 @@ class UserMenu extends React.Component {
 
 const mapStateToProps = state => {
   return {
-      name: state.user.screenName,
+      id: state.user.id,
+      name: state.user.name,  
   }
 }    
 

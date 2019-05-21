@@ -88,7 +88,6 @@ class AssignmentNew extends Component {
                     required
                     fullWidth
                 />                
-                <Paper></Paper>
                 <FormControl component="fieldset" >
                     <FormLabel component="legend">Assign to Classes</FormLabel>
                     <FormGroup>
@@ -103,7 +102,6 @@ class AssignmentNew extends Component {
                         )}
                     </FormGroup>
                 </FormControl>
-                <Paper></Paper>
                 <Grid container justify='flex-end' spacing={16} >
                     <Button variant="contained" color="primary" 
                             onClick={this.onSubmit}>

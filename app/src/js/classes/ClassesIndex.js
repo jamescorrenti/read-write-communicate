@@ -18,8 +18,7 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 
-import { iconColumnStyle, smallColumnStyle, mediumColumnStyle, largeColumnStyle } 
-  from '../styles/tableStyles';
+import * as TableStyles from '../styles/tableStyles';
 
 import { getCurrentClasses } from '../actions/cls';
 
@@ -44,32 +43,32 @@ class ClassesIndex extends Component {
           </Typography>
           <Button variant="contained" color="primary" component={RouterLink} to="/classes/new" >
             Add Class
-            <AddIcon style={{fontSize: 28 }}/>
+            <AddIcon style={TableStyles.actionIcon}/>
           </Button>                 
         </Grid>
 
         <Table >
           <TableHead>
             <TableRow>
-              <TableCell style={iconColumnStyle} ></TableCell>
-              <TableCell style={largeColumnStyle}>Name</TableCell>
-              <TableCell style={iconColumnStyle} ></TableCell>
+              <TableCell style={TableStyles.iconColumn} ></TableCell>
+              <TableCell style={TableStyles.largeColumn}>Name</TableCell>
+              <TableCell style={TableStyles.iconColumn} ></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {this.props.classes.map(row => 
               <TableRow key={row.id}>
-                <TableCell align="center" style={iconColumnStyle} component="th" scope="row">
+                <TableCell align="center" style={TableStyles.iconColumn} component="th" scope="row">
                   <Link component={RouterLink} to={{pathname: `/classes/${row.id}`, state:{ teacherId: this.state.teacherId }}} >
-                    <PeopleIcon style={{ fontSize: 28 }}/>
+                    <PeopleIcon style={TableStyles.actionIcon}/>
                   </Link>                    
                 </TableCell>
-                <TableCell style={largeColumnStyle}>
+                <TableCell style={TableStyles.largeColumn}>
                   {row.name}
                 </TableCell>
-                <TableCell align="center" style={iconColumnStyle} component="th" scope="row">
+                <TableCell align="center" style={TableStyles.iconColumn} component="th" scope="row">
                   <IconButton aria-label="Edit" onClick={() => this.props.editCallback(row.id) } >
-                    <EditIcon style={{ fontSize: 16 }}/>
+                    <EditIcon style={TableStyles.actionIcon}/>
                   </IconButton> 
                 </TableCell>
               </TableRow>

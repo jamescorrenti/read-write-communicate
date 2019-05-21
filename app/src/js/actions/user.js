@@ -1,62 +1,78 @@
-import { handleAPIErrors } from './handleAPIErrors';
+import axios from 'axios';
 
-export function loginUser(credentials,callback) {
-    return (dispatch) => {
-       const request = {'username': credentials.username, 'password': credentials.password};
-console.log('login user request body',JSON.stringify(request))
-       const options = {
-            method: 'POST',
-            body: JSON.stringify(request),
-            headers: {
-              'Content-Type': 'application/json'
-            }
-        };
-        let auth;
-        fetch('/api/v1/login', options)
-            .then(res => handleAPIErrors(res))        
-            .then(res => {
-              //  auth = res.headers.get('authorization');          
-                return res.json()            
-            })
-            .then (res =>{
-                localStorage.setItem('access_token', res.access_token);  
-                localStorage.setItem('refresh_token', res.refresh_token);                  
-                console.log('login response',res)                
-                dispatch({ type:'LOGIN_USER', 
-                        accessToken: res.access_token, 
-                        // following hardcoded temporarily
-                        id: 1, screenName: 'JoeStudent', role:'student' });
-                callback();
-            })
-            .catch(function(error) {
-                console.log('Login Error',error);
-            });               
-    };
-}
+const API_VERSION='/api/v1'
 
-export function logoutUser(callback) {
-    return (dispatch) => {
-        // const token = localStorage.getItem("token");
-        // const options = {
-        //     method: 'DELETE',
-        //     headers: new Headers({
-        //         'Authorization': `${token}`, 
-        //         'Content-Type': 'application/json'
-        //     })
-        // };           
-        // fetch("/logout", options)
-        //     .then(res => handleAPIErrors(res))         
-        //     .then(res => {
-        //         localStorage.removeItem('token');
-        //         dispatch({type: "LOGOUT_USER"});
-        //         callback();
-        // }).catch(function(error) {
-        //     console.log(error);     
-        // })  
-        // fake code for no backend
-        localStorage.removeItem('token'); 
-        dispatch({type: "LOGOUT_USER"}); 
-        callback();    
+export const loginUser = (credentials,successCallback,errorCallback) => async (dispatch) => {
+    console.log('login user start')
+    try {
+        const request = {'username': credentials.username, 'password': credentials.password};  
+        console.log('go to post')
+        const res = await axios.post(
+                `${API_VERSION}/login`, 
+                JSON.stringify(request),
+                { headers: {
+                    'Content-Type': 'application/json',
+                }});
+        console.log('back from post')
+        localStorage.setItem('access_token', res.data.access_token);  
+        localStorage.setItem('refresh_token', res.data.refresh_token);
+        console.log('go to get profile')
+        const res2 = await axios.get(
+            `${API_VERSION}/user/${res.data.id}`,
+            {
+                headers: {
+                  'Authorization': 'Bearer ' + res.data.access_token,
+                  'Content-Type': 'application/json'
+                }
+            });       
+            // To Do: adjust res2.data to profile fields that front end wants.
+            console.log("login id",res.data.id,res2.data.id)            
+            dispatch({ type:'LOGIN_USER', 
+                        authenticated: res.data.access_token,
+                        profile: res2.data
+            });
+        successCallback();
     }
-}    
+    catch (e) {
+        errorCallback(`Login Error: ${e}`)
+    }
+};
 
+export const logoutUser = (id,callback) => async (dispatch) => {
+    try {
+        const token = localStorage.getItem('access_token');        
+        const res = await axios.post(
+                `${API_VERSION}/logout/access`,
+                {id:id},
+                { headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,       
+                }}
+        );      
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');                
+        dispatch({type: 'LOGOUT_USER'});
+        callback();
+    }
+    catch (e) {
+        console.log(`Logout Error: ${e}`)
+    }
+};
+
+export const updateUserProfile = (id,profile) => async (dispatch) => {
+    try {
+        const request = {...profile};  
+        const token = localStorage.getItem('access_token');        
+        const res = await axios.post(
+                `${API_VERSION}/user/${id}`, 
+                JSON.stringify(request),
+                { headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,       
+        }});      
+        dispatch({ type:'USER_PROFILE', payload: profile });
+    }
+    catch (e) {
+        console.log(`Update Profile Error: ${e}`)
+    }
+};

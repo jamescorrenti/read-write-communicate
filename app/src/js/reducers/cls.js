@@ -6,7 +6,7 @@ export default function (
     state = INITIAL_STATE,
     action
 ){
-   console.log("Classes Reducer",action.type);
+ //  console.log("Classes Reducer",action.type);
     switch (action.type) { 
         case "CLASSES_INDEX":
             return {...state, index: action.payload}   

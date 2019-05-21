@@ -7,6 +7,7 @@
     "@babel/plugin-proposal-class-properties": "^7.4.4",
     "@material-ui/core": "^3.9.3",
     "@material-ui/icons": "^3.0.2",
+    "axios": "^0.18.0",
     "history": "^4.9.0",
     "js-cookie": "^2.2.0",
     "react-router-dom": "^5.0.0",
@@ -22,6 +23,7 @@
     "react-redux": "^7.0.3",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
+    "regenerator-runtime": "^0.13.2",
     "url-loader": "^1.1.2",
     "webpack": "^4.30.0",
     "webpack-cli": "^3.3.2"
