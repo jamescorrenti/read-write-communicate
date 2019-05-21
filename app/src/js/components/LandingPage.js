@@ -37,6 +37,7 @@ const styles = theme => ({
     marginBottom: '0.5em'
   }      
 });
+
 class LandingPage extends Component {
 
   render() {

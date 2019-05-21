@@ -1,5 +1,6 @@
 import { handleAPIErrors } from './handleAPIErrors';
-
+import axios from 'axios';
+const API_VERSION='/api/v1'
 export function getOpenAssignments() {
     return (dispatch) => {
     
@@ -13,18 +14,27 @@ export function getOpenAssignments() {
     };
 }
 
-export function getSubmittedAssignments(studentId) {
-    return (dispatch) => {
-    
-// Fake code for not using backend 
+export const getSubmittedAssignments = (id) => async (dispatch) => {
+    try {         
+        const res = await axios.get(
+                `${API_VERSION}/student/${id}/assignments/submitted`, 
+                {id:id},
+                { headers: {
+                    'Content-Type': 'application/json',                  
+                }});
+        console.log('get assignments',res)
+        // Fake code for not using backend 
         dispatch({type:"STUDENT_SUBMITTED_ASSIGNMENTS", payload: [
             { id: 0, submit_date: '1/2/18', name: 'Assignment 1', class: {name: "Social Studies"}},
             { id: 1, submit_date: '2/2/18', name: 'Assignment 2', class: {name: "Language Arts"}},
             { id: 3, submit_date: '3/2/18', name: 'Assignment 3', class: {name: "Math"}},
         ]});
-       
-    };
+    }
+    catch (e) {
+        console.log(`Get Submitted Assignments for student ${id} Error: ${e}`)
+    }
 }
+
 export function getStudentAssignment(id) {
     console.log("action get student assignment", id);
     return (dispatch) => {

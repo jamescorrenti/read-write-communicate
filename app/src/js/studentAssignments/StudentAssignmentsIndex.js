@@ -19,9 +19,9 @@ import { getSubmittedAssignments } from '../actions/studentAssignment';
 class StudentAssignmentIndex extends Component {
 
   state = {
-    studentId: this.props.location.state
+    studentId: this.props.match.params.id
   }
-  
+
   componentDidMount() {
     this.props.getSubmittedAssignments(this.state.studentId)
   }

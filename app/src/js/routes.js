@@ -26,7 +26,7 @@ export default function getRoutes () {
             <Route exact path="/dashboard" component={Dashboard} />
 
             <Route exact path="/studentassignments/open" component={StudentAssignmentsOpen} />
-            <Route exact path="/studentassignments" component={StudentAssignmentsIndex} />
+            <Route exact path="/student/:id/assignments/submitted" component={StudentAssignmentsIndex} />
             <Route path="/studentassignments/:id/edit" component={StudentAssignmentEdit} />            
             <Route path="/studentassignments/:id" component={StudentAssignmentView} />
 
