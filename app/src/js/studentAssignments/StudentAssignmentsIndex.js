@@ -23,6 +23,7 @@ class StudentAssignmentIndex extends Component {
   }
 
   componentDidMount() {
+    // To Do: no need for redux, just handle it locally in the component
     this.props.getSubmittedAssignments(this.state.studentId)
   }
 
@@ -49,7 +50,7 @@ class StudentAssignmentIndex extends Component {
                     <AssignmentIcon style={TableStyles.actionIcon}/>
                   </Link>    
                 </TableCell>
-                <TableCell style={TableStyles.smallColumn}>{row.submit_date}</TableCell>
+                <TableCell style={TableStyles.smallColumn}>{Date(row.submit_date).toLocaleDateString()}</TableCell>
                 <TableCell style={TableStyles.mediumColumn}>{row.class.name}</TableCell>
                 <TableCell style={TableStyles.largeColumn}>{row.name}</TableCell>
               </TableRow>

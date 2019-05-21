@@ -39,7 +39,7 @@ const SideMenu = (props) => {
         case 'student':
           return [
             {text:'Dashboard', path:'/dashboard'},
-            {text:'Current Assignments', path:'/studentassignments/open', params:{studentId: props.userId}},
+            {text:'Current Assignments', path:`/student/${props.userId}/assignments/todo` },
             {text:'Submitted Assignments', path:`/student/${props.userId}/assignments/submitted` }]
         case 'faculty':
           return [

@@ -10,9 +10,9 @@ import { getStudentAssignment } from "../actions/studentAssignment";
 class StudentAssignmentView extends Component {
 
     componentDidMount() {
-      let assignmentId = this.props.match.params.id; 
-      console.log("assignment view getting student assignment")    
-      this.props.getStudentAssignment(assignmentId)
+      let studentId = this.props.match.params.id; 
+      let assignmentId = this.props.match.params.assignment_id; 
+      this.props.getStudentAssignment(studentId, assignmentId)
     }
 
     render () {
@@ -31,15 +31,16 @@ class StudentAssignmentView extends Component {
             <React.Fragment>
                 <AssignmentHeader 
                     title={this.props.assignment.name}
-                    class={this.props.assignment.class.name} 
+                    class={this.props.assignment.class} 
+                    teacher={this.props.assignment.teacher} 
                     instructions={this.props.assignment.instructions}
                 />
                 <Paper style={customPaperStyle}>
                     <Typography variant="h6" component="h6" >
-                        {this.props.assignment.questions[0].q}
+                        {this.props.assignment.question}
                     </Typography>
                     <Typography component="p" gutterBottom>
-                        {this.props.assignment.questions[0].answer}
+                        {this.props.assignment.question.answer}
                     </Typography>            
                 </Paper>
                 <Paper style={customPaperStyle}>
