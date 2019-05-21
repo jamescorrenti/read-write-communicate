@@ -106,7 +106,7 @@ class User(UserMixin, db.Model):
     # location = db.Column(db.String(64))
     avatar_hash = db.Column(db.String(32))
     schools = db.relationship("SchoolUser", back_populates="user")
-    type = db.Column(db.String(50))
+    type = db.Column(db.String(50), nullable=False)
 
     __mapper_args__ = {
         'polymorphic_identity': 'user',
@@ -208,7 +208,7 @@ class RevokedTokenModel(db.Model):
 class Faculty(User):
     __tablename__ = 'faculty'
     id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
-    faculty_name = db.Column(db.String(30))
+    # faculty_name = db.Column(db.String(30))
     classes = db.relationship("Class", back_populates="teacher")
 
     __mapper_args__ = {
@@ -230,10 +230,15 @@ class ClassStudent(db.Model):
 class StudentAssignment(db.Model):
     __tablename__ = 'student_assignment'
     id = db.Column(db.Integer, primary_key=True)
+    submitted = db.Column(db.Boolean, default=False)
+    submit_date = db.Column(db.DateTime)
+    draft = db.Column(db.Boolean)
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'))
     student = db.relationship("Student", back_populates="assignments")
     assignment = db.relationship("Assignment", back_populates="students")
     assignment_id = db.Column(db.Integer, db.ForeignKey('assignment.id'))
+
+    # TODO: expand data statistics here
     fk_ease = db.Column(db.Integer)
     fk_grade = db.Column(db.Integer)
 
@@ -241,7 +246,7 @@ class StudentAssignment(db.Model):
 class Student(User):
     __tablename__ = 'student'
     id = db.Column(db.Integer, db.ForeignKey('users.id'), primary_key=True)
-    student_name = db.Column(db.String(30))
+    # student_name = db.Column(db.String(30))
     classes = db.relationship("ClassStudent", back_populates="student")
     assignments = db.relationship("StudentAssignment", back_populates="student")
     grade = db.Column(db.Integer)
@@ -282,6 +287,7 @@ class Assignment(db.Model):
     __tablename__ = 'assignment'
     id = db.Column(db.Integer, primary_key=True)
     instructions = db.Column(db.Text)
+    name = db.Column(db.Text)
     due_date = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     class_id = db.Column(db.Integer, db.ForeignKey('class.id'), nullable=False)
     _class = db.relationship("Class", back_populates="assignments")
@@ -323,7 +329,7 @@ class QuestionSchema(ma.ModelSchema):
 class UserSchema(ma.ModelSchema):
     class Meta:
         model = User
-        model_fields_kwargs = {'password_hash': {'load_only': True}}
+        # model_fields_kwargs = {'password_hash': {'load_only': True}}
 
 
 class SchoolUserSchema(ma.ModelSchema):
