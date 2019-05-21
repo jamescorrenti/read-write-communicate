@@ -4,29 +4,35 @@ from .. import db
 from ..models import Assignment, Permission, AssignmentSchema
 from .decorators import permission_required
 from .errors import forbidden
+from flask_jwt_extended import jwt_required
+
 
 assignments_schema = AssignmentSchema(many=True)
 assignment_schema = AssignmentSchema()
 
 
 class AssignmentsResource(Resource):
+    @jwt_required
     def get(self):
         assignments = Assignment.query.all()
         return assignments_schema.jsonify(assignments)
 
 
 class AssignmentResource(Resource):
+    @jwt_required
     def get(self, id):
         assignment = Assignment.query.get_or_404(id)
         return assignment_schema.jsonify(assignment)
 
     # returns 1 if deleted, returns 0 if failed (did ID exist?)
+    @jwt_required
     def delete(self, id):
         assignment = Assignment.query.filter_by(id=id).delete()
         db.session.commit()
         return jsonify(assignment)
 
     # create an assignment TODO: figure out how not to use id to create an assignment
+    @jwt_required
     def post(self, id):
         json_data = request.get_json()
         if not json_data:
@@ -42,6 +48,7 @@ class AssignmentResource(Resource):
             return {"message": e._message(), "status": 400}, 400
 
     # update assignment
+    @jwt_required
     def put(self, id):
         assignment = Assignment.query.get_or_404(id)
         json_data = request.get_json()

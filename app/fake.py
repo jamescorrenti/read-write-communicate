@@ -1,4 +1,4 @@
-from random import randint, uniform
+from random import randint, uniform, getrandbits
 from sqlalchemy.exc import IntegrityError
 from faker import Faker
 from . import db
@@ -123,9 +123,25 @@ def assignments(count=100):
     for i in range(count):
         c = Class.query.offset(randint(0, class_count)).first()
         a = Assignment(instructions=fake.text(),
-                       due_date=fake.past_date(),
+                       name=fake.text(),
+                       due_date=fake.date_this_year(),
                        class_id=c.id)
         db.session.add(a)
+        c_s = ClassStudent.query.filter_by(class_id=c.id)
+        for row in c_s:
+            s = Student.query.filter_by(id=row.student_id).first()
+            s_a = StudentAssignment(student_id=s.id,
+                                    assignment_id=a.id,
+                                    submit_date=a.due_date)
+
+            submitted = bool(getrandbits(1))
+            if submitted:
+                s_a.submitted = True
+                s_a.submit_date = fake.past_date()
+                s_a.fk_ease = uniform(0, 100)
+                s_a.fk_grade = uniform(0, 40)
+            db.session.add(s_a)
+
     db.session.commit()
 
 
@@ -136,11 +152,15 @@ def student_assignments(count=1000):
     for i in range(count):
         a = Assignment.query.offset(randint(0, assignment_count)).first()
         s = Student.query.offset(randint(0, student_count)).first()
+
         s_a = StudentAssignment(student_id=s.id,
-                                #timestamp=fake.past_date(),
                                 assignment_id=a.id,
                                 fk_ease=uniform(0, 100),
                                 fk_grade=uniform(0, 40))
+
+        if bool(getrandbits(1)):
+            s_a.submitted = True
+            s_a.submit_date = fake.past_date()
         db.session.add(s_a)
     db.session.commit()
 
@@ -163,9 +183,10 @@ def school_users(count=2):
 
 def questions(count=1000):
     fake = Faker()
-    a_count = Assignment.query.count() -1
-    for i in range(count):
-        a = Assignment.query.offset(randint(0, a_count)).first()
+
+    a_count = Assignment.query.count()
+    for i in range(a_count):
+        a = Assignment.query.offset(i).first()
         q = Question(q=fake.sentence(), assignment_id=a.id)
         db.session.add(q)
         try:

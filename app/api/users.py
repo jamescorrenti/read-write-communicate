@@ -1,7 +1,7 @@
 from flask import jsonify, request, abort
 from .. import db
 
-from ..models import User, Permission, UserSchema, RevokedTokenModel
+from ..models import User, Permission, UserSchema, RevokedTokenModel, Student, Faculty
 from .decorators import permission_required
 from .errors import forbidden
 from flask_restful import Resource, reqparse
@@ -13,18 +13,22 @@ parser = reqparse.RequestParser()
 parser.add_argument('username')
 parser.add_argument('email')
 parser.add_argument('password', help='This field cannot be blank', required=True)
+parser.add_argument('type')
 
-users_schema = UserSchema(many=True)
-user_schema = UserSchema()
+users_schema = UserSchema(many=True, exclude=['password_hash'])
+user_schema = UserSchema(exclude=['password_hash'])
 
 
 class UserRegistration(Resource):
     def post(self):
         data = parser.parse_args()
         try:
-            user, errors = user_schema.load(data)
-            if errors:
-                return jsonify(errors)
+            if data['type'] == 'student':
+                user = Student(**data)
+            elif data['type'] == 'faculty':
+                user = Faculty(**data)
+            else:
+                return {"message": "type must be studnet or faculty", "status": 400}, 400
             user.password = data['password']
             db.session.add(user)
             db.session.commit()
