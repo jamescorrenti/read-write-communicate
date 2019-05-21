@@ -25,7 +25,7 @@ class LoginFormContainer extends React.Component {
     e.preventDefault();
     this.props.loginUser(
         this.state, 
-        () => {    this.props.history.push(`/dashboard`)},
+        () => { this.props.history.push('/dashboard')},
         (message) => { this.setState({errorMessage: message}); this.handleClickOpen()}        
     );                 
     this.setState({ open: false, username: '', password: '' });

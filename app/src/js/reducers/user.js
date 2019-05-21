@@ -15,12 +15,16 @@ export default function (
    console.log("User Reducer",action.type);
     switch (action.type) { 
         case "LOGIN_USER":
-            return {...state, errorMessage:'', ...action}
+            // profile from action contains backend db names.  Making them friendly here...
+            let profile = { id:action.profile.id, name: action.profile.name, username: action.profile.username, 
+                        email: action.profile.email, avatar: action.profile.avatar_hash,
+                        role: action.profile.type }
+            return {...state, errorMessage:'', 
+                authenticated: action.authenticated, 
+                ...profile }  
         case "LOGOUT_USER":
             return {...state, errorMessage: '', 
                     authenticated: '', id: 0, name: '', role: '', avatar: ''}
-        case 'SET_USER':
-            return {...state, user: action.payload }     
         default:
             return state;
     }

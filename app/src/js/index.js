@@ -11,7 +11,7 @@ import App from './components/App';
 
 const store = createStore(
     rootReducer,
-    {   //initial state
+    {   //initial state --- ToDo: cannot just rely on the token, need to keep the id somewhere too...
         // user: { authenticated: localStorage.getItem('access_token')}
     },   
     // {},   
