@@ -12,7 +12,7 @@ assignment_schema = AssignmentSchema()
 
 
 class StudentSubmittedAssignmentsResource(Resource):
-    # @jwt_required
+    @jwt_required
     def get(self, id):
         student = Student.query.filter_by(id=id).first()
         sub_assignments = StudentAssignment.query.filter_by(student_id=student.id, submitted=True) \
@@ -22,7 +22,7 @@ class StudentSubmittedAssignmentsResource(Resource):
 
 
 class StudentTodoAssignmentsResource(Resource):
-    # @jwt_required
+    @jwt_required
     def get(self, id):
         student = Student.query.filter_by(id=id).first()
         todo_assignments = StudentAssignment.query.filter_by(student_id=student.id, submitted=False) \
@@ -42,7 +42,7 @@ class StudentTodoAssignmentsResource(Resource):
 
 
 class StudentAssignmentResource(Resource):
-    #@jwt_required
+    @jwt_required
     def get(self, id, assignment_id):
         assignment = Assignment.query.get_or_404(assignment_id)
         student_info = None
@@ -66,14 +66,14 @@ class StudentAssignmentResource(Resource):
         # return student_assignment_schema.jsonify(assignment)
 
     # returns 1 if deleted, returns 0 if failed (did ID exist?)
-    #@jwt_required
+    @jwt_required
     def delete(self, id, assignment_id):
         assignment = Assignment.query.filter_by(id=assignment_id).delete()
         db.session.commit()
         return jsonify(assignment)
 
     # submit an assignment TODO: figure out how not to use id to create an assignment
-    #@jwt_required
+    @jwt_required
     def post(self, id, assignment_id):
         json_data = request.get_json()
         if not json_data:
