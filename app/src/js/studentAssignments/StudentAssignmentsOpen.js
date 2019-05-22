@@ -35,7 +35,7 @@ class StudentAssignmentsOpen extends Component {
         <TableHead>
           <TableRow>
             <TableCell style={TableStyles.iconColumn} ></TableCell>
-            <TableCell style={TableStyles.smallColumn}>Date</TableCell>
+            <TableCell style={TableStyles.smallColumn}>Due Date</TableCell>
             <TableCell style={TableStyles.smallColumn}>Status</TableCell>
             <TableCell style={TableStyles.mediumColumn}>Class</TableCell>
             <TableCell style={TableStyles.largeColumn}>Title</TableCell>
@@ -50,10 +50,10 @@ class StudentAssignmentsOpen extends Component {
                     <EditIcon style={TableStyles.actionIcon}/>
                   </Link>    
                 </TableCell>
-                <TableCell style={TableStyles.smallColumn}>{Date(row.due_date).toLocaleDateString()}</TableCell>
-                <TableCell style={TableStyles.smallColumn}>{row.status}</TableCell>
+                <TableCell style={TableStyles.smallColumn}>{new Date(row.due_date).toLocaleDateString()}</TableCell>
+                <TableCell style={TableStyles.smallColumn}>{row.status} || "to be decided"</TableCell>
                 <TableCell style={TableStyles.mediumColumn}>{row.class}</TableCell>
-                <TableCell style={TableStyles.largeColumn}>{row.title}</TableCell>
+                <TableCell style={TableStyles.largeColumn}>{row.name.substr(0,20)}</TableCell>
               </TableRow>
             );
           })}
@@ -63,7 +63,9 @@ class StudentAssignmentsOpen extends Component {
     );
   }
 }
+/*
 
+*/
 const mapStateToProps = state => {
   return {
       assignments: state.studentAssignment.openAssignments

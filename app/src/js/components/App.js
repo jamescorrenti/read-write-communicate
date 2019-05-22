@@ -13,7 +13,7 @@ import { rwcTheme } from '../styles/rwcTheme'
 import getRoutes from '../routes'
 
 const divStyle = {
-  display: 'flex'
+  display: 'flex',
 };
 
 function App({children}) {
@@ -26,8 +26,8 @@ function App({children}) {
           <SideMenu />
           <ContentArea>
             {getRoutes()}
-          </ContentArea>    
-        </BrowserRouter>    
+          </ContentArea>  
+        </BrowserRouter>  
         <Footer />
       </div>
     </MuiThemeProvider>

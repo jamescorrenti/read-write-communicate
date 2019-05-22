@@ -10,7 +10,7 @@ export const getOpenAssignments = (id) => async (dispatch) => {
                 { headers: {
                     'Content-Type': 'application/json',                  
                 }});
-        console.log('get todo assignments',res);
+        console.log('get todo assignments',res.data);
         dispatch({type:"STUDENT_OPEN_ASSIGNMENTS", payload: res.data});        
     }
     catch (e) {
@@ -30,27 +30,27 @@ export const getOpenAssignments = (id) => async (dispatch) => {
         // ]});    
 }
 
-export const getSubmittedAssignments = (id) => async (dispatch) => {
-    try {         
-        const res = await axios.get(
-                `${API_VERSION}/student/${id}/assignments/submitted`, 
-                {id:id},
-                { headers: {
-                    'Content-Type': 'application/json',                  
-                }});
-        console.log('get assignments',res)
-        dispatch({type:"STUDENT_SUBMITTED_ASSIGNMENTS", payload: res.data});  
-    }
-    catch (e) {
-        console.log(`Get Submitted Assignments for student ${id} Error: ${e}`)
-    }
-    // Fake code for not using backend 
-    // dispatch({type:"STUDENT_SUBMITTED_ASSIGNMENTS", payload: [
-    //     { id: 0, submit_date: '2019-05-17T00:00:00+00:00', name: '22', class: {name: "Social Studies"}, ease: 51, grade:12},
-    //     { id: 1, submit_date: '2019-05-18T00:00:00+00:00', name: 'Assignment 2', class: {name: "Language Arts"}},
-    //     { id: 3, submit_date: '2019-05-17T00:00:00+00:00', name: 'Assignment 3', class: {name: "Math"}},
-    // ]});    
-}
+// export const getSubmittedAssignments = (id) => async (dispatch) => {
+//     try {         
+//         const res = await axios.get(
+//                 `${API_VERSION}/student/${id}/assignments/submitted`, 
+//                 {id:id},
+//                 { headers: {
+//                     'Content-Type': 'application/json',                  
+//                 }});
+//         console.log('get assignments',res.data)   
+//         dispatch({type:"STUDENT_SUBMITTED_ASSIGNMENTS", payload: res.data});  
+//     }
+//     catch (e) {
+//         console.log(`Get Submitted Assignments for student ${id} Error: ${e}`)
+//     }
+//     // Fake code for not using backend 
+//     // dispatch({type:"STUDENT_SUBMITTED_ASSIGNMENTS", payload: [
+//     //     { id: 0, submit_date: '2019-05-17T00:00:00+00:00', name: '22', class: {name: "Social Studies"}, ease: 51, grade:12},
+//     //     { id: 1, submit_date: '2019-05-18T00:00:00+00:00', name: 'Assignment 2', class: {name: "Language Arts"}},
+//     //     { id: 3, submit_date: '2019-05-17T00:00:00+00:00', name: 'Assignment 3', class: {name: "Math"}},
+//     // ]});    
+// }
 
 export const getStudentAssignment = (id,assignmentId) => async (dispatch) => {
     try {         

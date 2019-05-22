@@ -1,74 +1,58 @@
 import React, {Component} from 'react';
+import axios from 'axios';
 
-import { connect } from 'react-redux';
-import { Link as RouterLink } from 'react-router-dom';
-
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import Link from '@material-ui/core/Link';
-import AssignmentIcon from '@material-ui/icons/Assignment';
+import SuperTable from '../components/SuperTable';
 
-import * as TableStyles from '../styles/tableStyles';
-
-import { getSubmittedAssignments } from '../actions/studentAssignment';
+import { API_VERSION } from '../rwcConstants';
 
 class StudentAssignmentIndex extends Component {
 
   state = {
-    studentId: this.props.match.params.id
+    studentId: this.props.match.params.id,
+    assignments: []
   }
 
   componentDidMount() {
-    // To Do: no need for redux, just handle it locally in the component
-    this.props.getSubmittedAssignments(this.state.studentId)
+    try {
+      axios.get( `${API_VERSION}/student/${this.state.studentId}/assignments/submitted`, 
+                {id:this.state.studentId},
+                { headers: {
+                    'Content-Type': 'application/json',                  
+                }}).then((response)=>{
+                  this.setState(()=>{
+                    return {
+                      assignments: response.data
+                    }
+                  })
+                })
+    }
+    catch (e) {
+      console.log(`Get Submitted Assignments for student ${this.student.state.studentId} Error: ${e}`)
+    }
   }
-
+ 
   render() {
+    let columns = [
+      { label: '', style:'iconColumn', icon:'AssignmentIcon'},    
+      { label: 'Submit Date', style:'smallColumn'},
+      { label: 'Class', style:'mediumColumn'},
+      { label: 'Title', style:'largeColumn'}
+    ];
+    let data = this.state.assignments.map ((assn,index) => {
+      return { id: assn.id, 
+               date: new Date(assn.submit_date).toLocaleDateString(), 
+               class: assn.assignment._class.name ,
+               title: assn.assignment.name }             
+    });
 
     return (
       <Paper >
-      <Table >
-        <TableHead>
-          <TableRow>
-            <TableCell style={TableStyles.iconColumn}></TableCell>
-            <TableCell style={TableStyles.smallColumn}>Date</TableCell>
-            <TableCell style={TableStyles.mediumColumn}>Class</TableCell>
-            <TableCell style={TableStyles.largeColumn}>Name</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {this.props.assignments.map(row => {
-            return (
-              <TableRow key={row.id}>
-                <TableCell align="center" style={TableStyles.iconColumn} component="th" scope="row">
-                  <Link component={RouterLink} 
-                        to={{pathname: `/studentassignments/${row.id}`, state:{ studentId: this.state.studentId }}} >
-                    <AssignmentIcon style={TableStyles.actionIcon}/>
-                  </Link>    
-                </TableCell>
-                <TableCell style={TableStyles.smallColumn}>{Date(row.submit_date).toLocaleDateString()}</TableCell>
-                <TableCell style={TableStyles.mediumColumn}>{row.class.name}</TableCell>
-                <TableCell style={TableStyles.largeColumn}>{row.name}</TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+        <SuperTable columns={columns} data={data} />
       </Paper>
     );
   }
 }
 
-const mapStateToProps = state => {
-  return {
-      assignments: state.studentAssignment.submittedAssignments
-  }
-}    
-export default 
-  connect(mapStateToProps,{getSubmittedAssignments})
-  (StudentAssignmentIndex);
+export default StudentAssignmentIndex;
 
