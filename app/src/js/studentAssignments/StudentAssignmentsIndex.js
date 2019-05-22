@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import axios from 'axios';
 
 import Paper from '@material-ui/core/Paper';
-import SuperTable from '../components/SuperTable';
 
+import SuperTable from '../components/SuperTable';
 import { API_VERSION } from '../rwcConstants';
 
 class StudentAssignmentIndex extends Component {

@@ -1,5 +1,5 @@
 const INITIAL_STATE = {
-    openAssignments: [],
+    // openAssignments: [],
     // submittedAssignments: [],
     assignment: null
 }
@@ -9,9 +9,9 @@ export default function (
 ){
    console.log("StudentAssignment Reducer",action.type);
     switch (action.type) { 
-        case "STUDENT_OPEN_ASSIGNMENTS":
-        console.log("student open assignments",action.payload)
-            return {...state, openAssignments: action.payload}
+        // case "STUDENT_OPEN_ASSIGNMENTS":
+        // console.log("student open assignments",action.payload)
+        //     return {...state, openAssignments: action.payload}
         // case "STUDENT_SUBMITTED_ASSIGNMENTS":
         //     return {...state, submittedAssignments: action.payload}
         case "STUDENT_ASSIGNMENT":

@@ -2,33 +2,33 @@
 import axios from 'axios';
 const API_VERSION='/api/v1'
 
-export const getOpenAssignments = (id) => async (dispatch) => {
-    try {         
-        const res = await axios.get(
-                `${API_VERSION}/student/${id}/assignments/todo`, 
-                {id:id},
-                { headers: {
-                    'Content-Type': 'application/json',                  
-                }});
-        console.log('get todo assignments',res.data);
-        dispatch({type:"STUDENT_OPEN_ASSIGNMENTS", payload: res.data});        
-    }
-    catch (e) {
-        console.log(`Get Open Assignments for student ${id} Error: ${e}`)
-    }
-        // Fake code for not using backend 
-        // dispatch({type:"STUDENT_OPEN_ASSIGNMENTS", payload: [
-        //     "0": {
-        //         "assignment_id": 74,
-        //         "class": "Biology",
-        //         "due_date": "02-16-2019T00:00:00+00:00",
-        //         "name": "Author wide answer property step key. Surface job western.\nThere character should chair course image mouth. Close talk glass class. Decide must theory again development gun."
-        //     },         
-        //     { assignment_id: 0, due_date: '2019-06-22T00:00:00+00:00', status: "draft", title: "First", class: "Math" },
-        //     { assignment_id: 1, due_date: '2019-06-23T00:00:00+00:00', status: "draft", title: "Second", class: "Social Studies" },
-        //     { assignment_id: 3, due_date: '2019-06-24T00:00:00+00:00', status: "", title: "Third", class: "Language Arts"},
-        // ]});    
-}
+// export const getOpenAssignments = (id) => async (dispatch) => {
+//     try {         
+//         const res = await axios.get(
+//                 `${API_VERSION}/student/${id}/assignments/todo`, 
+//                 {id:id},
+//                 { headers: {
+//                     'Content-Type': 'application/json',                  
+//                 }});
+//         console.log('get todo assignments',res.data);
+//         dispatch({type:"STUDENT_OPEN_ASSIGNMENTS", payload: res.data});        
+//     }
+//     catch (e) {
+//         console.log(`Get Open Assignments for student ${id} Error: ${e}`)
+//     }
+//         // Fake code for not using backend 
+//         // dispatch({type:"STUDENT_OPEN_ASSIGNMENTS", payload: [
+//         //     "0": {
+//         //         "assignment_id": 74,
+//         //         "class": "Biology",
+//         //         "due_date": "02-16-2019T00:00:00+00:00",
+//         //         "name": "Author wide answer property step key. Surface job western.\nThere character should chair course image mouth. Close talk glass class. Decide must theory again development gun."
+//         //     },         
+//         //     { assignment_id: 0, due_date: '2019-06-22T00:00:00+00:00', status: "draft", title: "First", class: "Math" },
+//         //     { assignment_id: 1, due_date: '2019-06-23T00:00:00+00:00', status: "draft", title: "Second", class: "Social Studies" },
+//         //     { assignment_id: 3, due_date: '2019-06-24T00:00:00+00:00', status: "", title: "Third", class: "Language Arts"},
+//         // ]});    
+// }
 
 // export const getSubmittedAssignments = (id) => async (dispatch) => {
 //     try {         
