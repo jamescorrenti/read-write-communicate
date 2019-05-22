@@ -16,6 +16,7 @@ export const loginUser = (credentials,successCallback,errorCallback) => async (d
         console.log('back from post')
         localStorage.setItem('access_token', res.data.access_token);  
         localStorage.setItem('refresh_token', res.data.refresh_token);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.access_token}`;        
         console.log('go to get profile')
         const res2 = await axios.get(
             `${API_VERSION}/user/${res.data.id}`,
@@ -40,13 +41,11 @@ export const loginUser = (credentials,successCallback,errorCallback) => async (d
 
 export const logoutUser = (id,callback) => async (dispatch) => {
     try {
-        const token = localStorage.getItem('access_token');        
         const res = await axios.post(
                 `${API_VERSION}/logout/access`,
                 {id:id},
                 { headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,       
+                    'Content-Type': 'application/json',   
                 }}
         );      
         localStorage.removeItem('access_token');
@@ -61,14 +60,12 @@ export const logoutUser = (id,callback) => async (dispatch) => {
 
 export const updateUserProfile = (id,profile) => async (dispatch) => {
     try {
-        const request = {...profile};  
-        const token = localStorage.getItem('access_token');        
+        const request = {...profile};        
         const res = await axios.post(
                 `${API_VERSION}/user/${id}`, 
                 JSON.stringify(request),
                 { headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,       
+                    'Content-Type': 'application/json',    
         }});      
         dispatch({ type:'USER_PROFILE', payload: profile });
     }

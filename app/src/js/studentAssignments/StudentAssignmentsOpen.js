@@ -19,9 +19,10 @@ import { getOpenAssignments } from '../actions/studentAssignment';
 class StudentAssignmentsOpen extends Component {
 
   state = {
-    studentId: this.props.location.state
+    studentId: this.props.match.params.id
   }  
   componentDidMount() {
+        // To Do: no need for redux, just handle it locally in the component
     this.props.getOpenAssignments(this.state.studentId)
   }
 
@@ -43,15 +44,15 @@ class StudentAssignmentsOpen extends Component {
         <TableBody>
           {this.props.assignments.map(row => {
             return (
-              <TableRow key={row.id}>
+              <TableRow key={row.assignment_id}>
                 <TableCell align="center" style={TableStyles.iconColumn} component="th" scope="row">
-                <Link component={RouterLink} to={{pathname: `/studentassignments/${row.id}/edit`, state:{ studentId: this.state.studentId }}} >
+                <Link component={RouterLink} to={{pathname: `/studentassignments/${row.assignment_id}/edit`, state:{ studentId: this.state.studentId }}} >
                     <EditIcon style={TableStyles.actionIcon}/>
                   </Link>    
                 </TableCell>
-                <TableCell style={TableStyles.smallColumn}>{row.due_date}</TableCell>
+                <TableCell style={TableStyles.smallColumn}>{Date(row.due_date).toLocaleDateString()}</TableCell>
                 <TableCell style={TableStyles.smallColumn}>{row.status}</TableCell>
-                <TableCell style={TableStyles.mediumColumn}>{row.class.name}</TableCell>
+                <TableCell style={TableStyles.mediumColumn}>{row.class}</TableCell>
                 <TableCell style={TableStyles.largeColumn}>{row.title}</TableCell>
               </TableRow>
             );

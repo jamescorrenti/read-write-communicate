@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 15cbf33439df
+Revision ID: aacc1e436ecd
 Revises: 
-Create Date: 2019-05-20 07:47:16.156620
+Create Date: 2019-05-21 10:11:45.624495
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '15cbf33439df'
+revision = 'aacc1e436ecd'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -50,14 +50,13 @@ def upgrade():
     sa.Column('confirmed', sa.Boolean(), nullable=True),
     sa.Column('name', sa.String(length=64), nullable=True),
     sa.Column('avatar_hash', sa.String(length=32), nullable=True),
-    sa.Column('type', sa.String(length=50), nullable=True),
+    sa.Column('type', sa.String(length=50), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
     op.create_index(op.f('ix_users_username'), 'users', ['username'], unique=True)
     op.create_table('faculty',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('faculty_name', sa.String(length=30), nullable=True),
     sa.ForeignKeyConstraint(['id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -73,7 +72,6 @@ def upgrade():
     )
     op.create_table('student',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('student_name', sa.String(length=30), nullable=True),
     sa.Column('grade', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -88,6 +86,7 @@ def upgrade():
     op.create_table('assignment',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('instructions', sa.Text(), nullable=True),
+    sa.Column('name', sa.Text(), nullable=True),
     sa.Column('due_date', sa.DateTime(), nullable=True),
     sa.Column('class_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['class_id'], ['class.id'], ),
@@ -114,6 +113,9 @@ def upgrade():
     )
     op.create_table('student_assignment',
     sa.Column('id', sa.Integer(), nullable=False),
+    sa.Column('submitted', sa.Boolean(), nullable=True),
+    sa.Column('submit_date', sa.DateTime(), nullable=True),
+    sa.Column('draft', sa.Boolean(), nullable=True),
     sa.Column('student_id', sa.Integer(), nullable=True),
     sa.Column('assignment_id', sa.Integer(), nullable=True),
     sa.Column('fk_ease', sa.Integer(), nullable=True),

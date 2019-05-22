@@ -18,6 +18,9 @@ const AssignmentHeader = (props) => {
             <Typography color="textSecondary" gutterBottom>
                 {props.class}
             </Typography>
+            <Typography color="textSecondary" gutterBottom>
+                {props.teacher}
+            </Typography>
             <Typography variant="h6" component="h6" >
                 Instructions:
             </Typography>
