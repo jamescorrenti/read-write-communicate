@@ -27,43 +27,17 @@ class StudentTodoAssignmentsResource(Resource):
         student = Student.query.filter_by(id=id).first()
         todo_assignments = StudentAssignment.query.filter_by(student_id=student.id, submitted=False) \
             .order_by(StudentAssignment.submit_date.asc())
-        assignments = {}
-        i = 0
-        for todo_assign in todo_assignments:
-            print(todo_assign.submit_date)
-            assign = Assignment.query.filter_by(id=todo_assign.assignment_id).first()
-            assignments[str(i)] = {"class": assign._class.name,
-                                   "due_date": assign.due_date.strftime("%m-%d-%YT%H:%M:%S+%M:%S"),
-                                   "name": assign.name, "assignment_id": assign.id}
-            i += 1
-        return jsonify(assignments)
-        # return student_assignments_schema.jsonify(todo_assignments)
-        # student = get_jwt_identity()
+        return student_assignments_schema.jsonify(todo_assignments)
 
 
 class StudentAssignmentResource(Resource):
-    @jwt_required
+    #@jwt_required
     def get(self, id, assignment_id):
         assignment = Assignment.query.get_or_404(assignment_id)
-        student_info = None
         for s_a in assignment.students:
             if s_a.student_id == id:
-                student_info = s_a
-        if student_info:
-            return {"class": assignment._class.name,
-                    "teacher": assignment._class.teacher.name,
-                    "due_date": assignment.due_date.strftime("%m-%d-%YT%H:%M:%S+%M:%S"),
-                    "id": assignment_id,
-                    "instructions": assignment.instructions,
-                    "question": assignment.questions[0].q,
-                    "answer": assignment.questions[0].answer,
-                    "submitted": student_info.submitted,
-                    "fk_ease": student_info.fk_ease,
-                    "fk_grade": student_info.fk_grade
-            }
-        else:
-            return {"message": "Not assigned"}, 400
-        # return student_assignment_schema.jsonify(assignment)
+                return student_assignment_schema.jsonify(s_a)
+        return {"message": "Not assigned"}, 400
 
     # returns 1 if deleted, returns 0 if failed (did ID exist?)
     @jwt_required

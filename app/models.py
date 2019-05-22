@@ -239,8 +239,8 @@ class StudentAssignment(db.Model):
     assignment_id = db.Column(db.Integer, db.ForeignKey('assignment.id'))
 
     # TODO: expand data statistics here
-    fk_ease = db.Column(db.Integer)
-    fk_grade = db.Column(db.Integer)
+    fk_ease = db.Column(db.Float)
+    fk_grade = db.Column(db.Float)
 
 
 class Student(User):
@@ -303,23 +303,6 @@ class Question(db.Model):
     assignment = db.relationship("Assignment", back_populates="questions")
     assignment_id = db.Column(db.Integer, db.ForeignKey('assignment.id'))
 
-    def to_json(self):
-        json_question = {
-            'url': url_for('api.get_question', id=self.id),
-            'assignment_url': url_for('api.get_assignment', id=self.assignment_id),
-            'body': self.q,
-            'timestamp': self.timestamp,
-            # TODO: implement class API 'class': url_for('api.get_class', id=self.author_id),
-        }
-        return json_question
-
-    @staticmethod
-    def from_json(json_question):
-        body = json_question.get('q')
-        if body is None or body == '':
-            raise ValidationError('Question does not have a body')
-        return Question(body=body)
-
 
 class QuestionSchema(ma.ModelSchema):
     class Meta:
@@ -342,21 +325,23 @@ class FacultySchema(ma.ModelSchema):
         model = Faculty
 
 
-class AssignmentSchema(ma.ModelSchema):
-    class Meta:
-        model = Assignment
-    class_id = fields.Int()
-
-
 class ClassSchema(ma.ModelSchema):
     class Meta:
         model = Class
+    teacher = ma.Nested(FacultySchema, exclude=['password_hash'])
+
+
+class AssignmentSchema(ma.ModelSchema):
+    class Meta:
+        model = Assignment
+
+    _class = ma.Nested(ClassSchema, exclude=['students'])
+    #class_id = fields.Int()
 
 
 class StudentSchema(ma.ModelSchema):
     class Meta:
         model = Student
-
 
 class SchoolSchema(ma.ModelSchema):
     class Meta:
@@ -371,6 +356,6 @@ class ClassStudentSchema(ma.ModelSchema):
 class StudentAssignmentSchema(ma.ModelSchema):
     class Meta:
         model = StudentAssignment
-
+    assignment = ma.Nested(AssignmentSchema, exclude=['students'])
 
 # db.event.listen(Question.body, 'set', Question.on_changed_body)
